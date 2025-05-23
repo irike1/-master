@@ -1,0 +1,8 @@
+sample:
+  name: 2x2 Keypad HID
+  description: > 
+    Minimal Zephyr 4.1.0 application for nRF5340DK implementing a 2x2 matrix keypad 
+    that sends keys 1-4 via USB HID.
+  boards:
+    - nrf5340dk_nrf5340_cpuapp
+  tags: usb hid input
