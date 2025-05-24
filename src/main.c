@@ -1,33 +1,55 @@
 #include <zephyr/kernel.h>
 #include <zephyr/device.h>
+#include <zephyr/drivers/gpio.h>
+#include <zephyr/drivers/spi.h>
+#include <zephyr/dt-bindings/input/input-event-codes.h>
+#include <zephyr/input/input.h>
+#include <zephyr/input/input_hid.h>
 #include <zephyr/usb/usb_device.h>
 #include <zephyr/usb/class/usb_hid.h>
 #include <zephyr/usb/class/hid.h>
-#include <zephyr/input/input.h>
-#include <zephyr/input/input_hid.h>
-#include <zephyr/dt-bindings/input/input-event-codes.h>
-#include <zephyr/drivers/gpio.h>
+#include <zephyr/sys/util.h>
+#include "led_strip.h"
 
-/* -----------------------------------------------------------------
- * USB HID (unchanged from previous revision)
- * -----------------------------------------------------------------*/
+#include <errno.h>
+#include <string.h>
+#define LOG_LEVEL 4
+#include <zephyr/logging/log.h>
+LOG_MODULE_REGISTER(main);
+
 static const uint8_t hid_report_desc[] = HID_KEYBOARD_REPORT_DESC();
 static uint8_t       key_report[8] = { 0 };
 static uint8_t       pressed_key_usages[6] = { 0 };
 static size_t        pressed_count = 0;
 
-/* -----------------------------------------------------------------
- * LEDs: LED0‑on‑board (P0.28) + LED1‑external (P0.01)
- * -----------------------------------------------------------------*/
+
 static const struct gpio_dt_spec led0  = GPIO_DT_SPEC_GET(DT_ALIAS(led0), gpios); /* P0.28 */
-static const struct gpio_dt_spec led1  = GPIO_DT_SPEC_GET(DT_ALIAS(led1), gpios); /* P0.01 */
 static bool blink_enabled = true;  /* toggled by button SW1 */
 
-/* -----------------------------------------------------------------
- * Button SW1 (on‑board Button 1) toggles blink_enabled
- * -----------------------------------------------------------------*/
 static const struct gpio_dt_spec btn1 = GPIO_DT_SPEC_GET(DT_ALIAS(sw0), gpios);
 static struct gpio_callback       btn1_cb_data;
+
+#define STRIP_NODE		DT_ALIAS(led_strip)
+
+#if DT_NODE_HAS_PROP(DT_ALIAS(led_strip), chain_length)
+#define STRIP_NUM_PIXELS	DT_PROP(DT_ALIAS(led_strip), chain_length)
+#else
+#error Unable to determine length of LED strip
+#endif
+
+#define DELAY_TIME K_MSEC(CONFIG_SAMPLE_LED_UPDATE_DELAY)
+
+#define RGB(_r, _g, _b) { .r = (_r), .g = (_g), .b = (_b) }
+
+static const struct led_rgb colors[] = {
+	RGB(0x0f, 0x00, 0x00), /* red */
+	RGB(0x00, 0x0f, 0x00), /* green */
+	RGB(0x00, 0x00, 0x0f), /* blue */
+};
+
+static struct led_rgb pixels[STRIP_NUM_PIXELS];
+
+static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);
 
 
 
@@ -41,9 +63,6 @@ static void btn1_pressed_cb(const struct device *dev,
     blink_enabled = !blink_enabled;
 }
 
-/* -----------------------------------------------------------------
- * Input callback → HID (matrix keys only, button lines removed)
- * -----------------------------------------------------------------*/
 static void handle_key_event(struct input_event *evt, void *user_data)
 {
     if (evt->type != INPUT_EV_KEY) {
@@ -91,35 +110,37 @@ static void handle_key_event(struct input_event *evt, void *user_data)
 }
 INPUT_CALLBACK_DEFINE(NULL, handle_key_event, NULL);
 
-/* -----------------------------------------------------------------
- * main()
- * -----------------------------------------------------------------*/
-void main(void)
+
+int main(void)
 {
+	size_t color = 0;
+	int rc;
     /* --- USB HID setup (unchanged) --- */
     const struct device *hid_dev = device_get_binding("HID_0");
     if (!hid_dev) {
         printk("HID device not found\n");
-        return;
+        return 0;
     }
     usb_hid_register_device(hid_dev, hid_report_desc, sizeof(hid_report_desc), NULL);
     if (usb_hid_init(hid_dev)) {
         printk("USB HID init failed\n");
-        return;
+        return 0;
     }
     if (usb_enable(NULL)) {
         printk("USB enable failed\n");
-        return;
+        return 0;
     }
+		if (device_is_ready(strip)) {
+		LOG_INF("Found LED strip device %s", strip->name);
+	} else {
+		LOG_ERR("LED strip device %s is not ready", strip->name);
+		return 0;
+	}
 
     /* --- LEDs --- */
     if (gpio_is_ready_dt(&led0)) {
         gpio_pin_configure_dt(&led0, GPIO_OUTPUT_INACTIVE);
     }
-    if (gpio_is_ready_dt(&led1)) {
-        gpio_pin_configure_dt(&led1, GPIO_OUTPUT_INACTIVE);
-    }
-
     /* --- Button SW1 (toggle) --- */
     if (gpio_is_ready_dt(&btn1)) {
         gpio_pin_configure_dt(&btn1, GPIO_INPUT | GPIO_PULL_UP);
@@ -127,180 +148,19 @@ void main(void)
         gpio_init_callback(&btn1_cb_data, btn1_pressed_cb, BIT(btn1.pin));
         gpio_add_callback(btn1.port, &btn1_cb_data);
     }
+	while (1) {
+		for (size_t cursor = 0; cursor < ARRAY_SIZE(pixels); cursor++) {
+			memset(&pixels, 0x00, sizeof(pixels));
+			memcpy(&pixels[cursor], &colors[color], sizeof(struct led_rgb));
 
-    printk("Keypad‑HID ready; LED blinker toggled by SW1.\n");
+			rc = led_strip_update_rgb(strip, pixels, STRIP_NUM_PIXELS);
+			if (rc) {
+				LOG_ERR("couldn't update strip: %d", rc);
+			}
 
-    /* --- Blink loop --- */
-    while (true) {
-        if (blink_enabled) {
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G7  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+			k_sleep(DELAY_TIME);
+		}
 
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* G6  =1 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G5  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G4  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G3  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* G2  =1 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G1  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G0  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			/* ----------- Red byte (same 0x40 pattern) --------------------------- */
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R7  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* R6  =1 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R5  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R4  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R3  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* R2  =1 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R1  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R0  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			/* ----------- Blue byte (same 0x40 pattern) -------------------------- */
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B7  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* B6  =1 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B5  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B4  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B3  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* B2  =1 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B1  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B0  =0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			/* --- Latch / reset gap --------------------------------------------- */
-			k_sleep(K_NSEC(50000));        /* ≥ 50 µs low */
-            // // gpio_pin_set_dt(&led0, 1);
-            // gpio_pin_set_dt(&led1, 1);
-            // k_sleep(K_NSEC(2));
-
-            // // gpio_pin_set_dt(&led0, 0);
-            // gpio_pin_set_dt(&led1, 0);
-            // k_sleep(K_NSEC(2));
-        } else {
-			/* --- 24-bit frame for “black” (GRB = 0x00 0x00 0x00) --------------- */
-			/* Every bit = 0 : high 0.40 µs, low 0.85 µs                           */
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* bit 23 (G7) = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* bit 22 (G6) = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G5 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G4 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G3 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G2 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G1 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G0 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			/* ----------- Red byte (all zeros) ---------------------------------- */
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R7 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R6 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R5 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R4 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R3 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R2 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R1 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R0 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			/* ----------- Blue byte (all zeros) --------------------------------- */
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B7 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B6 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B5 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B4 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B3 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B2 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B1 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B0 = 0 */
-			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
-
-			/* --- Latch / reset gap --------------------------------------------- */
-			k_sleep(K_NSEC(50000));          /* ≥ 50 µs low */
-
-            // /* Ensure LEDs remain off while disabled */
-            // gpio_pin_set_dt(&led0, 0);
-            // gpio_pin_set_dt(&led1, 0);
-            // k_sleep(K_MSEC(100));
-        }
-    }
+		color = (color + 1) % ARRAY_SIZE(colors);
+	}
 }

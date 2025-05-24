@@ -1,3 +1,5 @@
+#include "led.h"
+
 / {
     /* Input event-code and MATRIX_KEY macros */
     #include <zephyr/dt-bindings/input/input-event-codes.h>
@@ -28,22 +30,35 @@
     };
 };
 
-/* Map on‑board DK buttons (SW1‑SW4) to INPUT_KEY_5‑8 */
-// &button0 { zephyr,code = <INPUT_KEY_5>; };
-// &button1 { zephyr,code = <INPUT_KEY_6>; };
-// &button2 { zephyr,code = <INPUT_KEY_7>; };
-// &button3 { zephyr,code = <INPUT_KEY_8>; };
-/ {
-    leds {
-        compatible = "gpio-leds";
+&pinctrl {
+	i2s0_default_alt: i2s0_default_alt {
+		group1 {
+			psels = <NRF_PSEL(I2S_SCK_M, 1, 15)>,
+				<NRF_PSEL(I2S_LRCK_M, 1, 12)>,
+				<NRF_PSEL(I2S_SDOUT, 1, 13)>,
+				<NRF_PSEL(I2S_SDIN, 1, 14)>;
+		};
+	};
+};
 
-        ext_led1: led1 {
-            gpios = <&gpio1 13 GPIO_ACTIVE_HIGH>;   /* P0.01 */
-            label = "Ext LED1";
-        };
-    };
+&i2s0 {
+	#address-cells = <1>;
+	#size-cells = <0>;
+	status = "okay";
+	pinctrl-0 = <&i2s0_default_alt>;
+	pinctrl-names = "default";
 
-    aliases {
-        led1 = &ext_led1;   /* lets application use DT_ALIAS(led1) */
-    };
+	led_strip: ws2812@0 {
+		compatible = "worldsemi,ws2812-i2s";
+		reg = <0>;                        /* required by binding */
+		chain-length = <5>;
+		color-mapping = <LED_COLOR_ID_GREEN
+				         LED_COLOR_ID_RED
+				         LED_COLOR_ID_BLUE>;
+		reset-delay = <500>;
+	};
+};
+
+&{/aliases} {
+	led-strip = &led_strip;
 };
