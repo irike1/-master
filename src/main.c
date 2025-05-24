@@ -29,6 +29,8 @@ static bool blink_enabled = true;  /* toggled by button SW1 */
 static const struct gpio_dt_spec btn1 = GPIO_DT_SPEC_GET(DT_ALIAS(sw0), gpios);
 static struct gpio_callback       btn1_cb_data;
 
+
+
 static void btn1_pressed_cb(const struct device *dev,
                             struct gpio_callback *cb,
                             uint32_t pins)
@@ -131,18 +133,174 @@ void main(void)
     /* --- Blink loop --- */
     while (true) {
         if (blink_enabled) {
-            gpio_pin_set_dt(&led0, 1);
-            gpio_pin_set_dt(&led1, 1);
-            k_sleep(K_NSEC(2));
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G7  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
 
-            gpio_pin_set_dt(&led0, 0);
-            gpio_pin_set_dt(&led1, 0);
-            k_sleep(K_NSEC(0));
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* G6  =1 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G5  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G4  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G3  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* G2  =1 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G1  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G0  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			/* ----------- Red byte (same 0x40 pattern) --------------------------- */
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R7  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* R6  =1 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R5  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R4  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R3  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* R2  =1 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R1  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R0  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			/* ----------- Blue byte (same 0x40 pattern) -------------------------- */
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B7  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* B6  =1 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B5  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B4  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B3  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* B2  =1 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B1  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B0  =0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			/* --- Latch / reset gap --------------------------------------------- */
+			k_sleep(K_NSEC(50000));        /* ≥ 50 µs low */
+            // // gpio_pin_set_dt(&led0, 1);
+            // gpio_pin_set_dt(&led1, 1);
+            // k_sleep(K_NSEC(2));
+
+            // // gpio_pin_set_dt(&led0, 0);
+            // gpio_pin_set_dt(&led1, 0);
+            // k_sleep(K_NSEC(2));
         } else {
-            /* Ensure LEDs remain off while disabled */
-            gpio_pin_set_dt(&led0, 0);
-            gpio_pin_set_dt(&led1, 0);
-            k_sleep(K_MSEC(100));
+			/* --- 24-bit frame for “black” (GRB = 0x00 0x00 0x00) --------------- */
+			/* Every bit = 0 : high 0.40 µs, low 0.85 µs                           */
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(800));  /* bit 23 (G7) = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(450));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* bit 22 (G6) = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G5 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G4 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G3 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G2 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G1 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* G0 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			/* ----------- Red byte (all zeros) ---------------------------------- */
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R7 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R6 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R5 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R4 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R3 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R2 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R1 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* R0 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			/* ----------- Blue byte (all zeros) --------------------------------- */
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B7 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B6 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B5 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B4 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B3 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B2 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B1 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			gpio_pin_set_dt(&led1, 1); k_sleep(K_NSEC(400));  /* B0 = 0 */
+			gpio_pin_set_dt(&led1, 0); k_sleep(K_NSEC(850));
+
+			/* --- Latch / reset gap --------------------------------------------- */
+			k_sleep(K_NSEC(50000));          /* ≥ 50 µs low */
+
+            // /* Ensure LEDs remain off while disabled */
+            // gpio_pin_set_dt(&led0, 0);
+            // gpio_pin_set_dt(&led1, 0);
+            // k_sleep(K_MSEC(100));
         }
     }
 }
