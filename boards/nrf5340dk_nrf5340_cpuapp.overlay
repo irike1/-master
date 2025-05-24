@@ -1,26 +1,49 @@
 / {
-    /* Include input event code definitions for key mapping macros */
+    /* Input event-code and MATRIX_KEY macros */
     #include <zephyr/dt-bindings/input/input-event-codes.h>
     #include <zephyr/dt-bindings/input/keymap.h>
 
+    /* External 2×2 keypad on GPIO1.04‑1.07 */
     kbd_matrix: keypad {
         compatible = "gpio-kbd-matrix";
-        /* 2 Row pins: P1.04 and P1.05 (with pull-up, active low) */
+
+        /* Rows: P1.04, P1.05 (inputs, pull‑up, active‑low) */
         row-gpios = <&gpio1 4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
                     <&gpio1 5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
-        /* 2 Column pins: P1.06 and P1.07 (active low outputs) */
+
+        /* Columns: P1.06, P1.07 (outputs, active‑low) */
         col-gpios = <&gpio1 6 GPIO_ACTIVE_LOW>,
                     <&gpio1 7 GPIO_ACTIVE_LOW>;
-        /* Keymap mapping each (row, col) to an input key code */
-        keymap {
+
+        keymap: keymap {
             compatible = "input-keymap";
-            /* Matrix key mappings: (row, col, input code) */
-            keymap = < MATRIX_KEY(0, 0, INPUT_KEY_1)   /* Key 1 */
-                       MATRIX_KEY(0, 1, INPUT_KEY_2)   /* Key 2 */
-                       MATRIX_KEY(1, 0, INPUT_KEY_3)   /* Key 3 */
-                       MATRIX_KEY(1, 1, INPUT_KEY_4) >;/* Key 4 */
             row-size = <2>;
             col-size = <2>;
+            /* (row, col) → INPUT_KEY_n mappings */
+            keymap = < MATRIX_KEY(0, 0, INPUT_KEY_1)   /* 1 */
+                       MATRIX_KEY(0, 1, INPUT_KEY_2)   /* 2 */
+                       MATRIX_KEY(1, 0, INPUT_KEY_3)   /* 3 */
+                       MATRIX_KEY(1, 1, INPUT_KEY_4) >;/* 4 */
         };
+    };
+};
+
+/* Map on‑board DK buttons (SW1‑SW4) to INPUT_KEY_5‑8 */
+// &button0 { zephyr,code = <INPUT_KEY_5>; };
+// &button1 { zephyr,code = <INPUT_KEY_6>; };
+// &button2 { zephyr,code = <INPUT_KEY_7>; };
+// &button3 { zephyr,code = <INPUT_KEY_8>; };
+/ {
+    leds {
+        compatible = "gpio-leds";
+
+        ext_led1: led1 {
+            gpios = <&gpio1 13 GPIO_ACTIVE_HIGH>;   /* P0.01 */
+            label = "Ext LED1";
+        };
+    };
+
+    aliases {
+        led1 = &ext_led1;   /* lets application use DT_ALIAS(led1) */
     };
 };
