@@ -23,6 +23,8 @@ LOG_MODULE_REGISTER(ws2812_spi);
 #include <zephyr/sys/util.h>
 #include <zephyr/dt-bindings/led/led.h>
 
+#include <"led_strip.h">
+
 /* spi-one-frame and spi-zero-frame in DT are for 8-bit frames. */
 #define SPI_FRAME_BITS 8
 
