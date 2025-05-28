@@ -6,4 +6,4 @@ These are the short-term goals of my project
 4. control a ws2805 chain
 5. setup Bluetooth connection
 
-Since (as far as I know) zephyr does not 32-bit rgb chains, I am currently attempting to stop using their led_strip drivers, and instead, reference a modified, local version. While I would love to help 
+Since (as far as I know) zephyr does not 32-bit rgb chains, I am currently attempting to stop using their led_strip drivers, and instead, reference a modified, local version. While I would love to help update the official drivers, I am not confident enough to not break everything.
