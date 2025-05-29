@@ -54,7 +54,9 @@
 		chain-length = <5>;
 		color-mapping = <LED_COLOR_ID_GREEN
 				         LED_COLOR_ID_RED
-				         LED_COLOR_ID_BLUE>;
+				         LED_COLOR_ID_BLUE
+                         LED_COLOR_ID_WARM
+                         LED_COLOR_ID_COOL>;
 		reset-delay = <500>;
 	};
 };

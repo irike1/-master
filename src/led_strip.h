@@ -1,5 +1,5 @@
 /*
- * Copyright (c) 2017 Linaro Limited
+ * Copyright (c) 2017 Linaro Limited  
  * Copyright (c) 2024 Jamie McCrae
  *
  * SPDX-License-Identifier: Apache-2.0
@@ -39,29 +39,41 @@ extern "C" {
  */
 struct led_rgb {
 #ifdef CONFIG_LED_STRIP_RGB_SCRATCH
-	/*
-	 * Pad/scratch space needed by some drivers. Users should
-	 * ignore.
-	 */
-	uint8_t scratch;
+        uint8_t scratch;
 #endif
-	/** Red channel */
-	uint8_t r;
-	/** Green channel */
-	uint8_t g;
-	/** Blue channel */
-	uint8_t b;
+        /** Red channel */
+        uint8_t r;
+        /** Green channel */
+        uint8_t g;
+        /** Blue channel */
+        uint8_t b;
+};
+
+/**
+ * @brief Color value for a single RGBWC LED (Red, Green, Blue, Warm white, Cool white).
+ */
+struct led_rgbwc {
+        /** Red channel */
+        uint8_t r;
+        /** Green channel */
+        uint8_t g;
+        /** Blue channel */
+        uint8_t b;
+        /** Warm White channel */
+        uint8_t warm;
+        /** Cool White channel */
+        uint8_t cool;
 };
 
 /**
  * @typedef led_api_update_rgb
- * @brief Callback API for updating an RGB LED strip
+ * @brief Callback API for updating an RGB LED strip.
  *
  * @see led_strip_update_rgb() for argument descriptions.
  */
 typedef int (*led_api_update_rgb)(const struct device *dev,
-				  struct led_rgb *pixels,
-				  size_t num_pixels);
+                                  struct led_rgb *pixels,
+                                  size_t num_pixels);
 
 /**
  * @typedef led_api_update_channels
@@ -70,102 +82,127 @@ typedef int (*led_api_update_rgb)(const struct device *dev,
  * @see led_strip_update_channels() for argument descriptions.
  */
 typedef int (*led_api_update_channels)(const struct device *dev,
-				       uint8_t *channels,
-				       size_t num_channels);
+                                       uint8_t *channels,
+                                       size_t num_channels);
 
 /**
  * @typedef led_api_length
- * @brief Callback API for getting length of an LED strip.
+ * @brief Callback API for getting the length of an LED strip.
  *
  * @see led_strip_length() for argument descriptions.
  */
 typedef size_t (*led_api_length)(const struct device *dev);
 
 /**
+ * @typedef led_api_update_rgbwc
+ * @brief Callback API for updating an RGBWC LED strip.
+ *
+ * @see led_strip_update_rgbwc() for argument descriptions.
+ */
+typedef int (*led_api_update_rgbwc)(const struct device *dev,
+                                    struct led_rgbwc *pixels,
+                                    size_t num_pixels);
+
+/**
  * @brief LED strip driver API
  *
- * This is the mandatory API any LED strip driver needs to expose.
+ * All LED strip drivers must implement this API.
  */
 __subsystem struct led_strip_driver_api {
-	led_api_update_rgb update_rgb;
-	led_api_update_channels update_channels;
-	led_api_length length;
+        led_api_update_rgb      update_rgb;
+        led_api_update_channels update_channels;
+        led_api_length          length;
+        led_api_update_rgbwc    update_rgbwc;
 };
 
 /**
- * @brief		Mandatory function to update an LED strip with the given RGB array.
+ * @brief Update an LED strip made of RGB pixels.
  *
- * @param dev		LED strip device.
- * @param pixels	Array of pixel data.
- * @param num_pixels	Length of pixels array.
+ * @note This routine may overwrite @a pixels.
  *
- * @retval		0 on success.
- * @retval		-errno negative errno code on failure.
+ * Immediately updates the strip display according to the given RGB pixel array.
  *
- * @warning		This routine may overwrite @a pixels.
+ * @param dev         LED strip device
+ * @param pixels      Array of RGB pixel data
+ * @param num_pixels  Number of pixels in the array
+ * @return 0 on success, negative error code on failure.
  */
 static inline int led_strip_update_rgb(const struct device *dev,
-				       struct led_rgb *pixels,
-				       size_t num_pixels)
+                                       struct led_rgb *pixels,
+                                       size_t num_pixels)
 {
-	const struct led_strip_driver_api *api =
-		(const struct led_strip_driver_api *)dev->api;
+        const struct led_strip_driver_api *api =
+                (const struct led_strip_driver_api *)dev->api;
 
-	/* Allow for out-of-tree drivers that do not have this function for 2 Zephyr releases
-	 * until making it mandatory, function added after Zephyr 3.6
-	 */
-	if (api->length != NULL) {
-		/* Ensure supplied pixel size is valid for this device */
-		if (api->length(dev) < num_pixels) {
-			return -ERANGE;
-		}
-	}
+        /* Validate pixel count if length callback is available */
+        if (api->length != NULL) {
+                if (api->length(dev) < num_pixels) {
+                        return -ERANGE;
+                }
+        }
 
-	return api->update_rgb(dev, pixels, num_pixels);
+        return api->update_rgb(dev, pixels, num_pixels);
 }
 
 /**
- * @brief		Optional function to update an LED strip with the given channel array
- *			(each channel byte corresponding to an individually addressable color
- *			channel or LED. Channels are updated linearly in strip order.
+ * @brief Update an LED strip on a per-channel basis.
  *
- * @param dev		LED strip device.
- * @param channels	Array of per-channel data.
- * @param num_channels	Length of channels array.
+ * @note This routine may overwrite @a channels.
  *
- * @retval		0 on success.
- * @retval		-ENOSYS if not implemented.
- * @retval		-errno negative errno code on other failure.
+ * Immediately updates the strip display according to the given channel array. Each 
+ * byte in the array corresponds to an LED color channel, and channels are sent 
+ * linearly in strip order.
  *
- * @warning		This routine may overwrite @a channels.
+ * @param dev          LED strip device
+ * @param channels     Array of channel data
+ * @param num_channels Length of the channels array
+ * @return 0 on success, -ENOSYS if not implemented, or negative error code.
  */
 static inline int led_strip_update_channels(const struct device *dev,
-					    uint8_t *channels,
-					    size_t num_channels)
+                                            uint8_t *channels,
+                                            size_t num_channels)
 {
-	const struct led_strip_driver_api *api =
-		(const struct led_strip_driver_api *)dev->api;
+        const struct led_strip_driver_api *api =
+                (const struct led_strip_driver_api *)dev->api;
 
-	if (api->update_channels == NULL) {
-		return -ENOSYS;
-	}
+        if (api->update_channels == NULL) {
+                return -ENOSYS;
+        }
 
-	return api->update_channels(dev, channels, num_channels);
+        return api->update_channels(dev, channels, num_channels);
 }
 
 /**
- * @brief	Mandatory function to get chain length (in pixels) of an LED strip device.
+ * @brief Update an LED strip made of RGBWC pixels (with warm & cool white).
  *
- * @param dev	LED strip device.
+ * @note This routine may overwrite @a pixels.
  *
- * @retval	Length of LED strip device.
+ * Immediately updates the strip display according to the given RGBWC pixel array.
+ * Each pixel contains red, green, blue, warm-white, and cool-white brightness values.
+ *
+ * @param dev         LED strip device
+ * @param pixels      Array of RGBWC pixel data
+ * @param num_pixels  Number of pixels in the array
+ * @return 0 on success, -ENOSYS if not supported, or negative error code.
  */
-static inline size_t led_strip_length(const struct device *dev)
+static inline int led_strip_update_rgbwc(const struct device *dev,
+                                         struct led_rgbwc *pixels,
+                                         size_t num_pixels)
 {
-	const struct led_strip_driver_api *api =
-		(const struct led_strip_driver_api *)dev->api;
+        const struct led_strip_driver_api *api =
+                (const struct led_strip_driver_api *)dev->api;
 
-	return api->length(dev);
+        if (api->length != NULL) {
+                if (api->length(dev) < num_pixels) {
+                        return -ERANGE;
+                }
+        }
+
+        if (api->update_rgbwc == NULL) {
+                return -ENOSYS;
+        }
+
+        return api->update_rgbwc(dev, pixels, num_pixels);
 }
 
 #ifdef __cplusplus
@@ -176,4 +213,4 @@ static inline size_t led_strip_length(const struct device *dev)
  * @}
  */
 
-#endif	/* ZEPHYR_INCLUDE_DRIVERS_LED_STRIP_H_ */
+#endif  /* ZEPHYR_INCLUDE_DRIVERS_LED_STRIP_H_ */

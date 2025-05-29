@@ -39,15 +39,18 @@ static struct gpio_callback       btn1_cb_data;
 
 #define DELAY_TIME K_MSEC(CONFIG_SAMPLE_LED_UPDATE_DELAY)
 
-#define RGB(_r, _g, _b) { .r = (_r), .g = (_g), .b = (_b) }
+#define RGBWC(_r, _g, _b, _w, _c) \
+        { .r = (_r), .g = (_g), .b = (_b), .warm = (_w), .cool = (_c) }
 
-static const struct led_rgb colors[] = {
-	RGB(0x0f, 0x00, 0x00), /* red */
-	RGB(0x00, 0x0f, 0x00), /* green */
-	RGB(0x00, 0x00, 0x0f), /* blue */
+static const struct led_rgbwc colors[] = {
+    RGBWC(0x0f, 0x00, 0x00, 0x00, 0x00),  /* red  */
+    RGBWC(0x00, 0x0f, 0x00, 0x00, 0x00),  /* green*/
+    RGBWC(0x00, 0x00, 0x0f, 0x00, 0x00),  /* blue */
+    RGBWC(0x00, 0x00, 0x00, 0x0f, 0x00),  /* warm-white */
+    RGBWC(0x00, 0x00, 0x00, 0x00, 0x0f),  /* cool-white */
 };
 
-static struct led_rgb pixels[STRIP_NUM_PIXELS];
+static struct led_rgbwc pixels[STRIP_NUM_PIXELS];
 
 static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);
 
@@ -151,9 +154,9 @@ int main(void)
 	while (1) {
 		for (size_t cursor = 0; cursor < ARRAY_SIZE(pixels); cursor++) {
 			memset(&pixels, 0x00, sizeof(pixels));
-			memcpy(&pixels[cursor], &colors[color], sizeof(struct led_rgb));
+			memcpy(&pixels[cursor], &colors[color], sizeof(struct led_rgbwc));
 
-			rc = led_strip_update_rgb(strip, pixels, STRIP_NUM_PIXELS);
+			rc = led_strip_update_rgbwc(strip, pixels, STRIP_NUM_PIXELS);
 			if (rc) {
 				LOG_ERR("couldn't update strip: %d", rc);
 			}
