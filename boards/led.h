@@ -15,6 +15,11 @@
 #define LED_COLOR_ID_VIOLET     5
 #define LED_COLOR_ID_YELLOW     6
 #define LED_COLOR_ID_IR         7
-#define LED_COLOR_ID_MAX        8
+
+/* Extended dual-white IDs for WS2805 */
+#define LED_COLOR_ID_WARM       8   /* Warm white  (W1) */
+#define LED_COLOR_ID_COOL       9   /* Cool white  (W2) */
+
+#define LED_COLOR_ID_MAX       10   /* one past highest ID */
 
 #endif /* ZEPHYR_INCLUDE_DT_BINDINGS_LED_LED_H_ */
