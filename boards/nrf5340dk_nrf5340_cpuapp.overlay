@@ -51,13 +51,13 @@
 	led_strip: ws2812@0 {
 		compatible = "worldsemi,ws2812-i2s";
 		reg = <0>;                        /* required by binding */
-		chain-length = <2>;
+		chain-length = <1>;
 		color-mapping = <LED_COLOR_ID_GREEN
 				         LED_COLOR_ID_RED
 				         LED_COLOR_ID_BLUE
                          LED_COLOR_ID_WHITE
                          LED_COLOR_ID_COOL>;
-		reset-delay = <500>;
+		reset-delay = <280>;
 	};
 };
 
