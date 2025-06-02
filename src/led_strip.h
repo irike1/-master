@@ -51,6 +51,8 @@ struct led_rgb {
 	uint8_t g;
 	/** Blue channel */
 	uint8_t b;
+	uint8_t w;	
+	uint8_t c;
 };
 
 /**

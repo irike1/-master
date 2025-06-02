@@ -39,12 +39,14 @@ static struct gpio_callback       btn1_cb_data;
 
 #define DELAY_TIME K_MSEC(CONFIG_SAMPLE_LED_UPDATE_DELAY)
 
-#define RGB(_r, _g, _b) { .r = (_r), .g = (_g), .b = (_b) }
+#define RGB(_r, _g, _b, _w, _c) { .r = (_r), .g = (_g), .b = (_b), .w = (_w), .c = (_c) }
 
 static const struct led_rgb colors[] = {
-	RGB(0x0f, 0x00, 0x00), /* red */
-	RGB(0x00, 0x0f, 0x00), /* green */
-	RGB(0x00, 0x00, 0x0f), /* blue */
+	RGB(0x0f, 0x00, 0x00, 0x00, 0x00),
+	RGB(0x0f, 0x00, 0x00, 0x00, 0x00),
+	RGB(0x0f, 0x00, 0x00, 0x00, 0x00),
+    RGB(0x0f, 0x00, 0x00, 0x00, 0x00),
+    RGB(0x0f, 0x00, 0x00, 0x00, 0x00),
 };
 
 static struct led_rgb pixels[STRIP_NUM_PIXELS];
