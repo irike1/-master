@@ -27,6 +27,12 @@ LOG_MODULE_REGISTER(ws2812_i2s);
 #include <zephyr/kernel.h>
 #include <zephyr/sys/util.h>
 
+/* WS2805 code waveform (ns) */
+#define WS2805_T0H_NS 220
+#define WS2805_T0L_NS 580
+#define WS2805_T1H_NS 580
+#define WS2805_T1L_NS 580
+
 #define WS2812_I2S_PRE_DELAY_WORDS 1
 
 struct ws2812_i2s_cfg {
@@ -49,7 +55,7 @@ static inline uint32_t ws2812_i2s_ser(uint8_t colour, uint8_t sym_one, uint8_t s
 {
     uint32_t word = 0;
     for (uint_fast8_t mask = 0x80; mask != 0; mask >>= 1) {
-        word <<= 5;
+        word <<= 4;
         word |= (colour & mask) ? sym_one : sym_zero;
     }
     /* Swap due to stereo channel ordering */
@@ -83,11 +89,11 @@ static int ws2812_strip_update_rgb(const struct device *dev,
         for (uint8_t j = 0; j < cfg->num_colors; j++) {
             uint8_t p = 0;
             switch (cfg->color_mapping[j]) {
-            case LED_COLOR_ID_WHITE: p = pixels[i].w; break;
             case LED_COLOR_ID_RED:   p = pixels[i].r; break;
             case LED_COLOR_ID_GREEN: p = pixels[i].g; break;
             case LED_COLOR_ID_BLUE:  p = pixels[i].b; break;
-            case LED_COLOR_ID_COOL:  p = pixels[i].c; break;
+            case LED_COLOR_ID_WHITE: p = pixels[i].w; break;
+            case LED_COLOR_ID_COOL:  p = 0; break;
             default: k_mem_slab_free(cfg->mem_slab, mem_block); return -EINVAL;
             }
             *tx_buf++ = ws2812_i2s_ser(p, sym_one, sym_zero) ^ reset_word;
@@ -147,10 +153,10 @@ static int ws2812_i2s_init(const struct device *dev)
     /* Validate colour mapping */
     for (uint8_t i = 0; i < cfg->num_colors; i++) {
         switch (cfg->color_mapping[i]) {
-        case LED_COLOR_ID_WHITE:
         case LED_COLOR_ID_RED:
         case LED_COLOR_ID_GREEN:
         case LED_COLOR_ID_BLUE:
+        case LED_COLOR_ID_WHITE:
         case LED_COLOR_ID_COOL:
             break;
         default:
@@ -173,7 +179,8 @@ static const struct led_strip_driver_api ws2812_i2s_api = {
 #endif
 
 #define WS2812_I2S_LRCK_PERIOD_US(i)  DT_INST_PROP(i, lrck_period)
-#define WS2812_RESET_DELAY_US(i)      DT_INST_PROP(i, reset_delay)
+#define WS2812_RESET_DELAY_US(i) (DT_NODE_HAS_PROP(DT_DRV_INST(i), reset_delay) ? \
+                                   DT_INST_PROP(i, reset_delay) : 300 /* µs default for WS2805 */)
 #define WS2812_RESET_DELAY_WORDS(i)   DIV_ROUND_UP(WS2812_RESET_DELAY_US(i), WS2812_I2S_LRCK_PERIOD_US(i))
 #define NUM_COLORS(i)                 DT_INST_PROP_LEN(i, color_mapping)
 #define NUM_PIXELS(i)                 DT_INST_PROP(i, chain_length)
