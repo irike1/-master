@@ -49,7 +49,7 @@ static inline uint32_t ws2812_i2s_ser(uint8_t colour, uint8_t sym_one, uint8_t s
 {
     uint32_t word = 0;
     for (uint_fast8_t mask = 0x80; mask != 0; mask >>= 1) {
-        word <<= 4;
+        word <<= 5;
         word |= (colour & mask) ? sym_one : sym_zero;
     }
     /* Swap due to stereo channel ordering */
@@ -78,33 +78,26 @@ static int ws2812_strip_update_rgb(const struct device *dev,
     for (uint8_t i = 0; i < WS2812_I2S_PRE_DELAY_WORDS; i++) {
         *tx_buf++ = reset_word;
     }
-    
+
     for (size_t i = 0; i < num_pixels; i++) {
         for (uint8_t j = 0; j < cfg->num_colors; j++) {
             uint8_t p = 0;
-
             switch (cfg->color_mapping[j]) {
             case LED_COLOR_ID_RED:   p = pixels[i].r; break;
             case LED_COLOR_ID_GREEN: p = pixels[i].g; break;
             case LED_COLOR_ID_BLUE:  p = pixels[i].b; break;
-
-            /* extra channels ignored by the RGB-only API → transmit 0 */
-            case LED_COLOR_ID_WHITE: /* legacy single white           */
-            case LED_COLOR_ID_WARM:  /* new warm-white (W1) channel   */
-            case LED_COLOR_ID_COOL:  /* new cool-white (W2) channel   */
-                p = 0;
-                break;
-
-            default:
-                k_mem_slab_free(cfg->mem_slab, mem_block);
-                return -EINVAL;
+            case LED_COLOR_ID_WHITE: p = pixels[i].w; break;
+            case LED_COLOR_ID_AMBER:  p = pixels[i].c; break;
+            default: k_mem_slab_free(cfg->mem_slab, mem_block); return -EINVAL;
             }
-
             *tx_buf++ = ws2812_i2s_ser(p, sym_one, sym_zero) ^ reset_word;
         }
     }
 
-\
+    for (uint16_t i = 0; i < cfg->reset_words; i++) {
+        *tx_buf++ = reset_word;
+    }
+
     /* Push via I²S */
     ret = i2s_write(cfg->dev, mem_block, cfg->tx_buf_bytes);
     if (ret < 0) {
@@ -121,55 +114,6 @@ static int ws2812_strip_update_rgb(const struct device *dev,
     uint32_t flush_us = cfg->lrck_period * (cfg->tx_buf_bytes / sizeof(uint32_t));
     k_usleep(flush_us + cfg->extra_wait_time_us);
 
-    return 0;
-}
-
-/* --- NEW: 5-channel RGBWC updater ------------------------------------ */
-static int ws2812_strip_update_rgbwc(const struct device *dev,
-                                     struct led_rgbwc *px,
-                                     size_t n_px)
-{
-    const struct ws2812_i2s_cfg *cfg = dev->config;
-    const uint8_t one  = cfg->nibble_one;
-    const uint8_t zero = cfg->nibble_zero;
-    const uint32_t rst = cfg->active_low ? ~0u : 0u;
-
-    void *blk;
-    int ret = k_mem_slab_alloc(cfg->mem_slab, &blk, K_SECONDS(10));
-    if (ret) { LOG_ERR("slab alloc %d", ret); return -ENOMEM; }
-
-    uint32_t *buf = blk;
-
-    for (uint8_t i = 0; i < WS2812_I2S_PRE_DELAY_WORDS; i++)
-        *buf++ = rst;
-
-    for (size_t i = 0; i < n_px; i++) {
-        for (uint8_t j = 0; j < cfg->num_colors; j++) {
-            uint8_t v = 0;
-            switch (cfg->color_mapping[j]) {
-            case LED_COLOR_ID_RED:   v = px[i].r;    break;
-            case LED_COLOR_ID_GREEN: v = px[i].g;    break;
-            case LED_COLOR_ID_BLUE:  v = px[i].b;    break;
-            case LED_COLOR_ID_WARM:  v = px[i].warm; break;
-            case LED_COLOR_ID_COOL:  v = px[i].cool; break;
-            case LED_COLOR_ID_WHITE: v = 0;          break;
-            default: k_mem_slab_free(cfg->mem_slab, blk); return -EINVAL;
-            }
-            *buf++ = ws2812_i2s_ser(v, one, zero) ^ rst;
-        }
-    }
-
-    for (uint16_t i = 0; i < cfg->reset_words; i++)
-        *buf++ = rst;
-
-    ret = i2s_write(cfg->dev, blk, cfg->tx_buf_bytes);
-    if (ret) { k_mem_slab_free(cfg->mem_slab, blk); return ret; }
-
-    i2s_trigger(cfg->dev, I2S_DIR_TX, I2S_TRIGGER_START);
-    i2s_trigger(cfg->dev, I2S_DIR_TX, I2S_TRIGGER_DRAIN);
-
-    uint32_t t_us = cfg->lrck_period * (cfg->tx_buf_bytes / sizeof(uint32_t));
-    k_usleep(t_us + cfg->extra_wait_time_us);
     return 0;
 }
 
@@ -203,10 +147,11 @@ static int ws2812_i2s_init(const struct device *dev)
     /* Validate colour mapping */
     for (uint8_t i = 0; i < cfg->num_colors; i++) {
         switch (cfg->color_mapping[i]) {
+        case LED_COLOR_ID_WHITE:
         case LED_COLOR_ID_RED:
         case LED_COLOR_ID_GREEN:
         case LED_COLOR_ID_BLUE:
-        case LED_COLOR_ID_WHITE:
+        case LED_COLOR_ID_COOL:
             break;
         default:
             LOG_ERR("%s: invalid colour mapping", dev->name);
@@ -219,7 +164,6 @@ static int ws2812_i2s_init(const struct device *dev)
 /* Driver API table ------------------------------------------------------ */
 static const struct led_strip_driver_api ws2812_i2s_api = {
     .update_rgb = ws2812_strip_update_rgb,
-    .update_rgbwc = ws2812_strip_update_rgbwc,
     .length     = ws2812_strip_length,
 };
 
