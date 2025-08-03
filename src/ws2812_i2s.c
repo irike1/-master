@@ -86,7 +86,9 @@ static int ws2812_strip_update_rgb(const struct device *dev,
             case LED_COLOR_ID_RED:   p = pixels[i].r; break;
             case LED_COLOR_ID_GREEN: p = pixels[i].g; break;
             case LED_COLOR_ID_BLUE:  p = pixels[i].b; break;
-            case LED_COLOR_ID_WHITE: p = 0;           break;
+            case LED_COLOR_ID_WHITE: p = pixels[i].w; break;
+            case LED_COLOR_ID_AMBER: p = pixels[i].a; break;
+
             default: k_mem_slab_free(cfg->mem_slab, mem_block); return -EINVAL;
             }
             *tx_buf++ = ws2812_i2s_ser(p, sym_one, sym_zero) ^ reset_word;
@@ -150,6 +152,8 @@ static int ws2812_i2s_init(const struct device *dev)
         case LED_COLOR_ID_GREEN:
         case LED_COLOR_ID_BLUE:
         case LED_COLOR_ID_WHITE:
+        case LED_COLOR_ID_AMBER:
+
             break;
         default:
             LOG_ERR("%s: invalid colour mapping", dev->name);

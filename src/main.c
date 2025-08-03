@@ -39,12 +39,15 @@ static struct gpio_callback       btn1_cb_data;
 
 #define DELAY_TIME K_MSEC(CONFIG_SAMPLE_LED_UPDATE_DELAY)
 
-#define RGB(_r, _g, _b) { .r = (_r), .g = (_g), .b = (_b) }
+#define RGB(_r, _g, _b, _w, _a) { .r = (_r), .g = (_g), .b = (_b), .w = (_w), .a = (_a) }
 
 static const struct led_rgb colors[] = {
-	RGB(0x0f, 0x00, 0x00), /* red */
-	RGB(0x00, 0x0f, 0x00), /* green */
-	RGB(0x00, 0x00, 0x0f), /* blue */
+	RGB(0x0f, 0x00, 0x00, 0x00, 0x00),
+    RGB(0x00, 0x0f, 0x00, 0x00, 0x00),
+    RGB(0x00, 0x00, 0x0f, 0x00, 0x00),
+    RGB(0x00, 0x00, 0x00, 0x0f, 0x00),
+    RGB(0x00, 0x00, 0x00, 0x00, 0x0f),
+
 };
 
 static struct led_rgb pixels[STRIP_NUM_PIXELS];
@@ -113,8 +116,7 @@ INPUT_CALLBACK_DEFINE(NULL, handle_key_event, NULL);
 
 int main(void)
 {
-	size_t color = 0;
-	int rc;
+
     /* --- USB HID setup (unchanged) --- */
     const struct device *hid_dev = device_get_binding("HID_0");
     if (!hid_dev) {
@@ -130,7 +132,9 @@ int main(void)
         printk("USB enable failed\n");
         return 0;
     }
-		if (device_is_ready(strip)) {
+
+    
+	if (device_is_ready(strip)) {
 		LOG_INF("Found LED strip device %s", strip->name);
 	} else {
 		LOG_ERR("LED strip device %s is not ready", strip->name);
@@ -138,6 +142,8 @@ int main(void)
 	}
 
     /* --- LEDs --- */
+    size_t color = 0;
+	int rc;
     if (gpio_is_ready_dt(&led0)) {
         gpio_pin_configure_dt(&led0, GPIO_OUTPUT_INACTIVE);
     }
@@ -159,6 +165,7 @@ int main(void)
 			}
 
 			k_sleep(DELAY_TIME);
+            
 		}
 
 		color = (color + 1) % ARRAY_SIZE(colors);

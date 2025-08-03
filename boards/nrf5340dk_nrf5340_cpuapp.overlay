@@ -19,13 +19,13 @@
 
         keymap: keymap {
             compatible = "input-keymap";
-            row-size = <2>;
-            col-size = <2>;
             /* (row, col) → INPUT_KEY_n mappings */
             keymap = < MATRIX_KEY(0, 0, INPUT_KEY_1)   /* 1 */
                        MATRIX_KEY(0, 1, INPUT_KEY_2)   /* 2 */
                        MATRIX_KEY(1, 0, INPUT_KEY_3)   /* 3 */
                        MATRIX_KEY(1, 1, INPUT_KEY_4) >;/* 4 */
+			row-size = <2>;
+            col-size = <2>;
         };
     };
 };
@@ -51,11 +51,18 @@
 	led_strip: ws2812@0 {
 		compatible = "worldsemi,ws2812-i2s";
 		reg = <0>;                        /* required by binding */
-		chain-length = <5>;
+		chain-length = <4>;
 		color-mapping = <LED_COLOR_ID_GREEN
 				         LED_COLOR_ID_RED
-				         LED_COLOR_ID_BLUE>;
-		reset-delay = <500>;
+				         LED_COLOR_ID_BLUE
+                         LED_COLOR_ID_WHITE
+                         LED_COLOR_ID_AMBER>;
+		reset-delay = <5>;
+        		/* --- precise timing --- */
+		lrck-period  = <10>;   /* 10 µs word  → 1.25 µs/bit */
+		nibble-zero  = <0x08>; /* 1000 → 0.3125 µs HIGH  */
+		nibble-one   = <0x0E>; /* 1110 → 0.9375 µs HIGH  */
+		reset-delay  = <300>;  /* ≥280 µs latch pause    */
 	};
 };
 
