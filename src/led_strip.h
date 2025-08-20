@@ -27,7 +27,11 @@ struct led_rgb {
 	/** Blue channel */
 	uint8_t b;
 	uint8_t w;
+<<<<<<< HEAD
 	uint8_t c;
+=======
+	uint8_t a;
+>>>>>>> local_driver
 };
 
 
