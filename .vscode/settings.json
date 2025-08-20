@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        "*.dtsi": "zephir",
+        "*.overlay": "zephir",
+        "kernel.h": "c"
+    }
+}

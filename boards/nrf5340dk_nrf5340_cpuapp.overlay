@@ -1,6 +1,7 @@
 #include "led.h"
 
 / {
+
     /* Input‑event codes and MATRIX_KEY helper macros */
     #include <zephyr/dt-bindings/input/input-event-codes.h>
     #include <zephyr/dt-bindings/input/keymap.h>
@@ -38,9 +39,11 @@
             < &gpio1 10 GPIO_ACTIVE_LOW >,
             < &gpio0 29 GPIO_ACTIVE_LOW >,
             < &gpio0 28 GPIO_ACTIVE_LOW >;
-
-        keymap: keymap {
+    
+     keymap: keymap {
             compatible = "input-keymap";
+            row-size = <7>;
+            col-size = <17>;
 
             /* keymap property – one MATRIX_KEY per switch, tokens separated by spaces */
             keymap = <
@@ -153,12 +156,11 @@
                 MATRIX_KEY(6, 15, INPUT_KEY_DOWN)
                 MATRIX_KEY(6, 16, INPUT_KEY_RIGHT)
             >;
-
-            row-size = <7>;
-            col-size = <17>;
         };
     };
 };
+
+
 
 / {
     leds {
