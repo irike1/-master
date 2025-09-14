@@ -44,6 +44,7 @@
             compatible = "input-keymap";
             row-size = <7>;
             col-size = <17>;
+    
 
             /* keymap property – one MATRIX_KEY per switch, tokens separated by spaces */
             keymap = <
@@ -158,9 +159,10 @@
             >;
         };
     };
+    aliases {
+        kbd = &kbd_matrix;   /* Correctly alias the keypad node */
+    };
 };
-
-
 
 / {
     leds {
@@ -211,9 +213,6 @@
 		nibble-one   = <0x0E>; /* 1110 → 0.9375 µs HIGH  */
 		reset-delay  = <300>;  /* ≥280 µs latch pause    */
 	};
-
-
-
 };
 
 &{/aliases} {

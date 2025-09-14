@@ -10,11 +10,35 @@
 #include <zephyr/usb/class/hid.h>
 #include <zephyr/sys/util.h>
 #include "led_strip.h"
-
 #include <errno.h>
 #include <string.h>
 #define LOG_LEVEL 4
 #include <zephyr/logging/log.h>
+
+// #include <zephyr/types.h>
+// #include <stddef.h>
+// #include <string.h>
+// #include <errno.h>
+// #include <zephyr/sys/printk.h>
+// #include <zephyr/sys/byteorder.h>
+// #include <zephyr/kernel.h>
+// #include <zephyr/drivers/gpio.h>
+// #include <soc.h>
+// #include <assert.h>
+// #include <zephyr/spinlock.h>
+// #include <zephyr/settings/settings.h>
+// #include <zephyr/bluetooth/bluetooth.h>
+// #include <zephyr/bluetooth/hci.h>
+// #include <zephyr/bluetooth/conn.h>
+// #include <zephyr/bluetooth/uuid.h>
+// #include <zephyr/bluetooth/gatt.h>
+// #include <zephyr/bluetooth/services/bas.h>
+// #include <bluetooth/services/hids.h>
+// #include <zephyr/bluetooth/services/dis.h>
+// #include <dk_buttons_and_leds.h>
+// #include "app_nfc.h"
+
+
 LOG_MODULE_REGISTER(main);
 
 static const uint8_t hid_report_desc[] = HID_KEYBOARD_REPORT_DESC();
@@ -36,10 +60,16 @@ static struct gpio_callback       btn1_cb_data;
 #else
 #error Unable to determine length of LED strip
 #endif
+static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);
 
 #define DELAY_TIME K_MSEC(CONFIG_SAMPLE_LED_UPDATE_DELAY)
 
 #define RGB(_r, _g, _b, _w, _a) { .r = (_r), .g = (_g), .b = (_b), .w = (_w), .a = (_a) }
+
+
+#define KBD_NODE DT_ALIAS(kbd)
+
+
 
 static const struct led_rgb colors[] = {
 	RGB(0x0f, 0x00, 0x00, 0x00, 0x00),
@@ -52,7 +82,17 @@ static const struct led_rgb colors[] = {
 
 static struct led_rgb pixels[STRIP_NUM_PIXELS];
 
-static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);
+static const struct device *const kbd = DEVICE_DT_GET(KBD_NODE);
+
+/* Call once during init (e.g., in main before registering listeners) */
+static int kbd_init_check(void)
+{
+	if (!device_is_ready(kbd)) {
+		printk("kbd device not ready\n");
+		return -ENODEV;
+	}
+	return 0;
+}
 
 
 
@@ -66,51 +106,64 @@ static void btn1_pressed_cb(const struct device *dev,
     blink_enabled = !blink_enabled;
 }
 
-static void handle_key_event(struct input_event *evt, void *user_data)
-{
+static uint8_t mod_state = 0;  // bit mask for Ctrl/Shift/Alt/GUI keys
+
+void handle_key_event(struct input_event *evt, void *user_data) {
     if (evt->type != INPUT_EV_KEY) {
         return;
     }
-    const uint16_t code  = evt->code;   /* INPUT_KEY_x */
-    const bool     press = evt->value;  /* 1 = down, 0 = up */
+    uint16_t code = evt->code;
+    bool press   = evt->value;  // 1 = key down, 0 = key up
 
-    /* Accept keys 1–4 only (external keypad). On‑board buttons handled via GPIO) */
-    if (code < INPUT_KEY_1 || code > INPUT_KEY_4) {
+    uint8_t hid_mod_bit = input_to_hid_modifier(code);
+    int16_t hid_usage   = input_to_hid_code(code);
+
+    if (hid_usage < 0 && hid_mod_bit == 0) {
+        // No HID mapping for this code (not a standard key or modifier)
         return;
     }
 
-    const int16_t hid_usage   = input_to_hid_code(code);
-    const uint8_t hid_mod_bit = input_to_hid_modifier(code);
-    if (hid_usage < 0) {
-        return;
-    }
-
-    /* Maintain pressed list */
-    if (press) {
-        if (pressed_count < 6) {
-            pressed_key_usages[pressed_count++] = (uint8_t)hid_usage;
+    // Update modifier state if this is a modifier key
+    if (hid_mod_bit) {
+        if (press) {
+            mod_state |= hid_mod_bit;
+        } else {
+            mod_state &= ~hid_mod_bit;
         }
-    } else {
-        for (size_t i = 0; i < pressed_count; ++i) {
-            if (pressed_key_usages[i] == (uint8_t)hid_usage) {
-                for (size_t j = i; j < pressed_count - 1; ++j) {
-                    pressed_key_usages[j] = pressed_key_usages[j + 1];
+    }
+
+    // Update pressed keys list if this is a regular key with a usage code
+    if (hid_usage >= 0) {
+        if (press) {
+            if (pressed_count < 6) {
+                pressed_key_usages[pressed_count++] = (uint8_t)hid_usage;
+            }
+        } else {
+            // Remove key from pressed_key_usages on release
+            for (size_t i = 0; i < pressed_count; ++i) {
+                if (pressed_key_usages[i] == (uint8_t)hid_usage) {
+                    // shift the remaining keys down in the array
+                    for (size_t j = i; j < pressed_count - 1; ++j) {
+                        pressed_key_usages[j] = pressed_key_usages[j+1];
+                    }
+                    pressed_count--;
+                    break;
                 }
-                pressed_count--;
-                break;
             }
         }
     }
 
-    /* Build 8‑byte report */
-    key_report[0] = hid_mod_bit && press ? hid_mod_bit : 0x00;
-    key_report[1] = 0x00; /* reserved */
+    // Build 8-byte HID report: [ modifier byte | reserved | 6 key codes ]
+    key_report[0] = mod_state;
+    key_report[1] = 0x00;  // reserved byte
     for (size_t i = 0; i < 6; ++i) {
         key_report[2 + i] = (i < pressed_count) ? pressed_key_usages[i] : 0x00;
     }
 
-    hid_int_ep_write(device_get_binding("HID_0"), key_report, sizeof(key_report), NULL);
+    hid_int_ep_write(device_get_binding("HID_0"),
+                     key_report, sizeof(key_report), NULL);
 }
+
 INPUT_CALLBACK_DEFINE(NULL, handle_key_event, NULL);
 
 
@@ -132,7 +185,6 @@ int main(void)
         printk("USB enable failed\n");
         return 0;
     }
-
     
 	if (device_is_ready(strip)) {
 		LOG_INF("Found LED strip device %s", strip->name);
@@ -140,6 +192,10 @@ int main(void)
 		LOG_ERR("LED strip device %s is not ready", strip->name);
 		return 0;
 	}
+    if (kbd_init_check()) {
+        return 0;  // Stop if keyboard device not ready
+    }
+
 
     /* --- LEDs --- */
     size_t color = 0;
