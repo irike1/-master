@@ -166,18 +166,7 @@ int main(void)
         gpio_pin_configure_dt(&led0, GPIO_OUTPUT_INACTIVE);
     }
 
-    while (1) {
-        for (size_t cursor = 0; cursor < ARRAY_SIZE(pixels); cursor++) {
-            memset(pixels, 0x00, sizeof(pixels));
-            memcpy(&pixels[cursor], &colors[color], sizeof(struct led_rgb));
-
-            rc = led_strip_update_rgb(strip, pixels, STRIP_NUM_PIXELS);
-            if (rc) {
-                LOG_ERR("couldn't update strip: %d", rc);
-            }
-
-            k_sleep(DELAY_TIME);
-        }
-        color = (color + 1) % ARRAY_SIZE(colors);
+       for (;;) {
+        k_sleep(K_FOREVER);
     }
 }

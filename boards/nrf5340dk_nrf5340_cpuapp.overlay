@@ -12,33 +12,33 @@
 
         /* ── Row GPIOs: P1.05 P0.23 P1.06 P0.19 P0.03 P0.02 P0.07 (inputs, pull‑up, active‑low) ── */
         row-gpios =
-            < &gpio1  5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW) >,
-            < &gpio0 23 (GPIO_PULL_UP | GPIO_ACTIVE_LOW) >,
-            < &gpio1  6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW) >,
-            < &gpio0 19 (GPIO_PULL_UP | GPIO_ACTIVE_LOW) >,
-            < &gpio0  3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW) >,
-            < &gpio0  2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW) >,
-            < &gpio0  7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW) >;
+            <&gpio1  5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+            <&gpio0 23 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+            <&gpio1  6 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+            <&gpio0 19 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+            // <&gpio0  3 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+            // <&gpio0  2 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+            <&gpio0  7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 
         /* ── Column GPIOs: P0.25 P0.22 P0.26 P0.24 P0.20 P1.08 P0.06 P1.00 P1.01 P0.05 P0.04 P1.11 P0.31 P0.30 P1.10 P0.29 P0.28 (outputs, active‑low) ── */
         col-gpios =
-            < &gpio0 25 GPIO_ACTIVE_LOW >,
-            < &gpio0 22 GPIO_ACTIVE_LOW >,
-            < &gpio0 26 GPIO_ACTIVE_LOW >,
-            < &gpio0 24 GPIO_ACTIVE_LOW >,
-            < &gpio0 20 GPIO_ACTIVE_LOW >,
-            < &gpio1  8 GPIO_ACTIVE_LOW >,
-            < &gpio0  6 GPIO_ACTIVE_LOW >,
-            < &gpio1  0 GPIO_ACTIVE_LOW >,
-            < &gpio1  1 GPIO_ACTIVE_LOW >,
-            < &gpio0  5 GPIO_ACTIVE_LOW >,
-            < &gpio0  4 GPIO_ACTIVE_LOW >,
-            < &gpio1 11 GPIO_ACTIVE_LOW >,
-            < &gpio0 31 GPIO_ACTIVE_LOW >,
-            < &gpio0 30 GPIO_ACTIVE_LOW >,
-            < &gpio1 10 GPIO_ACTIVE_LOW >,
-            < &gpio0 29 GPIO_ACTIVE_LOW >,
-            < &gpio0 28 GPIO_ACTIVE_LOW >;
+            <&gpio0 25 GPIO_ACTIVE_LOW>,
+            <&gpio0 22 GPIO_ACTIVE_LOW>,
+            <&gpio0 26 GPIO_ACTIVE_LOW>,
+            <&gpio0 24 GPIO_ACTIVE_LOW>,
+            <&gpio0 20 GPIO_ACTIVE_LOW>,
+            <&gpio1  8 GPIO_ACTIVE_LOW>,
+            <&gpio0  6 GPIO_ACTIVE_LOW>,
+            <&gpio1  0 GPIO_ACTIVE_LOW>,
+            <&gpio1  1 GPIO_ACTIVE_LOW>,
+            <&gpio0  5 GPIO_ACTIVE_LOW>,
+            <&gpio0  4 GPIO_ACTIVE_LOW>,
+            <&gpio1 11 GPIO_ACTIVE_LOW>,
+            <&gpio0 31 GPIO_ACTIVE_LOW>,
+            <&gpio0 30 GPIO_ACTIVE_LOW>,
+            <&gpio1 10 GPIO_ACTIVE_LOW>,
+            <&gpio0 29 GPIO_ACTIVE_LOW>,
+            <&gpio0 28 GPIO_ACTIVE_LOW>;
     
      keymap: keymap {
             compatible = "input-keymap";
@@ -48,8 +48,7 @@
 
             /* keymap property – one MATRIX_KEY per switch, tokens separated by spaces */
             keymap = <
-                /* Row 0 */
-                MATRIX_KEY(0,  1, INPUT_KEY_F13)
+                // MATRIX_KEY(0,  1, INPUT_KEY_F13)
                 MATRIX_KEY(0,  2, INPUT_KEY_F14)
                 MATRIX_KEY(0,  3, INPUT_KEY_F15)
                 MATRIX_KEY(0,  4, INPUT_KEY_F16)
@@ -58,9 +57,8 @@
                 MATRIX_KEY(0, 12, 163)   /* Next Track    */
                 MATRIX_KEY(0, 13, INPUT_KEY_MUTE)
 
-                /* Row 1 */
-                MATRIX_KEY(1,  0, INPUT_KEY_ESC)
-                MATRIX_KEY(1,  1, INPUT_KEY_F1)
+                // MATRIX_KEY(1,  0, INPUT_KEY_ESC)
+                // MATRIX_KEY(1,  1, INPUT_KEY_F1)
                 MATRIX_KEY(1,  2, INPUT_KEY_F2)
                 MATRIX_KEY(1,  3, INPUT_KEY_F3)
                 MATRIX_KEY(1,  4, INPUT_KEY_F4)
@@ -76,7 +74,6 @@
                 MATRIX_KEY(1, 15, INPUT_KEY_SCROLLLOCK)
                 MATRIX_KEY(1, 16, INPUT_KEY_PAUSE)
 
-                /* Row 2 */
                 MATRIX_KEY(2,  0, INPUT_KEY_GRAVE)
                 MATRIX_KEY(2,  1, INPUT_KEY_1)
                 MATRIX_KEY(2,  2, INPUT_KEY_2)
