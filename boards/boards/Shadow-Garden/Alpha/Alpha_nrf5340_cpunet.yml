@@ -1,0 +1,10 @@
+identifier: Alpha/nrf5340/cpunet
+name: Alpha
+vendor: Shadow-Garden
+type: mcu
+arch: arm
+ram: 64
+flash: 256
+toolchain:
+  - zephyr
+supported: []

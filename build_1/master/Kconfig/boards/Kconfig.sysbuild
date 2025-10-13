@@ -1,0 +1,2 @@
+# Load Sysbuild board Kconfig descriptions.
+osource "C:/my_boards/boards/nordic/g915/Kconfig.sysbuild"

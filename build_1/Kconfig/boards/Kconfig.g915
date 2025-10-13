@@ -1,0 +1,2 @@
+# Load board Kconfig descriptions.
+osource "C:/my_boards/boards/nordic/g915/Kconfig.g915"

@@ -5,6 +5,7 @@ sample:
     that sends keys 1-4 via USB HID.
   boards:
     - nrf5340dk_nrf5340_cpuapp
+    - g915_nrf5340_cpuapp
   tags: 
     - usb hid input
     - LED

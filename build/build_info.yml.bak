@@ -1,0 +1,22 @@
+cmake:
+  board:
+    name: nrf5340dk
+    path:
+     - C:/ncs/v3.0.1/zephyr/boards/nordic/nrf5340dk
+    qualifiers: nrf5340/cpuapp
+    revision: 
+  images:
+   - name: master
+     source-dir: C:/All/code/nrf/master
+     type: MAIN
+  kconfig:
+    files:
+     - C:/All/code/nrf/master/build/_sysbuild/empty.conf
+     - C:/All/code/nrf/master/build/_sysbuild/empty.conf
+    user-files:
+     - C:/All/code/nrf/master/build/_sysbuild/empty.conf
+version: 0.1.0
+west:
+  command: C:\ncs\toolchains\b620d30767\opt\bin\Scripts\west build --build-dir c:/All/code/nrf/master/build c:/All/code/nrf/master --pristine --board nrf5340dk/nrf5340/cpuapp
+  topdir: c:\ncs\v3.0.1
+  version: 1.2.0

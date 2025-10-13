@@ -2,5 +2,3 @@
 *.swp
 *~
 
-# build
-/build*/

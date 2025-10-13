@@ -1,0 +1,19 @@
+/dts-v1/;
+#include <nordic/nrf5340_cpuapp_qkaa.dtsi>
+#include "Alpha-pinctrl.dtsi"
+
+/ {
+	model = "Alpha (CPUAPP)";
+	compatible = "Shadow-Garden,Alpha-cpuapp";
+
+	chosen {
+		zephyr,sram = &sram0_image;
+		zephyr,flash = &flash0;
+		zephyr,code-partition = &slot0_partition;
+		zephyr,sram-secure-partition = &sram0_s;
+		zephyr,sram-non-secure-partition = &sram0_ns;
+	};
+};
+
+#include "Alpha-cpuapp_partitioning.dtsi"
+#include "Alpha-shared_sram.dtsi"
