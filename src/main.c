@@ -17,13 +17,7 @@
 
 LOG_MODULE_REGISTER(main);
 
-static const uint8_t hid_report_desc[] = HID_KEYBOARD_REPORT_DESC();
-static uint8_t       key_report[8] = { 0 };
-static uint8_t       pressed_key_usages[6] = { 0 };
-static size_t        pressed_count = 0;
-static const struct device *hid_dev = NULL;
 
-// static const struct gpio_dt_spec led0  = GPIO_DT_SPEC_GET(DT_ALIAS(led0), gpios);
 
 #define STRIP_NODE DT_ALIAS(led_strip)
 #if DT_NODE_HAS_PROP(DT_ALIAS(led_strip), chain_length)
@@ -48,116 +42,109 @@ static const struct led_rgb colors[] = {
 };
 
 static struct led_rgb pixels[STRIP_NUM_PIXELS];
-static const struct device *const kbd = DEVICE_DT_GET(KBD_NODE);
 
-/* Ensure keypad device is ready */
-static int kbd_init_check(void)
-{
-    if (!device_is_ready(kbd)) {
-        printk("kbd device not ready\n");
-        return -ENODEV;
-    }
-    return 0;
-}
 
-static uint8_t mod_state = 0;  /* modifier bitmask */
 
-/* Input -> HID keyboard (6KRO) */
-void handle_key_event(struct input_event *evt, void *user_data)
+/* HID keyboard report descriptor (standard boot keyboard with 6KRO) */
+static const uint8_t hid_report_desc[] = HID_KEYBOARD_REPORT_DESC();
+
+/* Buffer for current keys pressed (up to 6 keys) */
+static uint8_t key_report[8] = { 0 };  /* [0]=mods, [1]=reserved, [2..7]=keys */
+
+/* Track pressed keys count and list for building reports */
+static uint8_t pressed_key_usages[6] = { 0 };
+static size_t pressed_count = 0;
+
+static void handle_key_event(struct input_event *evt, void *user_data)
 {
     if (evt->type != INPUT_EV_KEY) {
-        return;
+        return;  /* Ignore non-key events */
     }
-
     uint16_t code = evt->code;
-    bool press    = (evt->value == 1); /* 1=down, 0=up; ignore 2=repeat */
+    int32_t value = evt->value;  /* 1 for press, 0 for release */
 
-    uint8_t hid_mod_bit = input_to_hid_modifier(code);
-    int16_t hid_usage   = input_to_hid_code(code);
+    /* Only handle our keypad keys (INPUT_KEY_1 through INPUT_KEY_4) */
+    // if (code < INPUT_KEY_1 || code > INPUT_KEY_4) {
+    //     return;
+    // }
 
-    if (hid_usage < 0 && hid_mod_bit == 0) {
-        /* not a keyboard usage or modifier */
-        return;
+    /* Convert to HID usage code and modifier (if any) */
+    int16_t hid_usage = input_to_hid_code(code);
+    uint8_t hid_modifier = input_to_hid_modifier(code);
+
+    if (hid_usage < 0) {
+        return;  // Unknown code, should not happen for our keys
     }
 
-    /* update modifiers */
-    if (hid_mod_bit) {
-        if (press) {
-            mod_state |= hid_mod_bit;
-        } else {
-            mod_state &= ~hid_mod_bit;
+    if (value) {
+        /* Key pressed: add to pressed keys list */
+        if (pressed_count < 6) {
+            pressed_key_usages[pressed_count++] = (uint8_t)hid_usage;
         }
-    }
-
-    /* update 6-key array for non-modifier usages */
-    if (hid_usage >= 0) {
-        if (press) {
-            bool exists = false;
-            for (size_t i = 0; i < pressed_count; ++i) {
-                if (pressed_key_usages[i] == (uint8_t)hid_usage) { exists = true; break; }
-            }
-            if (!exists && pressed_count < 6) {
-                pressed_key_usages[pressed_count++] = (uint8_t)hid_usage;
-            }
-        } else {
-            for (size_t i = 0; i < pressed_count; ++i) {
-                if (pressed_key_usages[i] == (uint8_t)hid_usage) {
-                    for (size_t j = i; j + 1 < pressed_count; ++j) {
-                        pressed_key_usages[j] = pressed_key_usages[j + 1];
-                    }
-                    pressed_count--;
-                    break;
+    } else {
+        /* Key released: remove from pressed keys list */
+        for (size_t i = 0; i < pressed_count; ++i) {
+            if (pressed_key_usages[i] == (uint8_t)hid_usage) {
+                /* Shift the remaining keys down in the list */
+                for (size_t j = i; j < pressed_count - 1; ++j) {
+                    pressed_key_usages[j] = pressed_key_usages[j+1];
                 }
+                pressed_count--;
+                break;
             }
         }
     }
 
-    if (!hid_dev) {
-        return; /* HID not ready yet */
+    /* Build HID report for current keys pressed */
+    key_report[0] = 0x00;  /* no modifiers by default */
+    key_report[1] = 0x00;  /* reserved byte */
+    /* Set modifier byte if any pressed key is a modifier (not the case for 1–4) */
+    if (hid_modifier && value) {
+        key_report[0] |= hid_modifier;
     }
-
-    /* build and send 8-byte keyboard report */
-    key_report[0] = mod_state;
-    key_report[1] = 0x00;
+    /* Fill key code slots, pad with 0x00 for no key */
     for (size_t i = 0; i < 6; ++i) {
         key_report[2 + i] = (i < pressed_count) ? pressed_key_usages[i] : 0x00;
     }
 
-    int ret = hid_int_ep_write(hid_dev, key_report, sizeof(key_report), NULL);
-    if (ret) {
-        LOG_WRN("HID write failed: %d", ret);
-    }
+    /* Send report via HID interrupt endpoint */
+    hid_int_ep_write(device_get_binding("HID_0"), key_report, sizeof(key_report), NULL);
 }
-
-/* Limit input listener to the keypad device */
-INPUT_CALLBACK_DEFINE(DEVICE_DT_GET(KBD_NODE), handle_key_event, NULL);
-
+INPUT_CALLBACK_DEFINE(NULL, handle_key_event, NULL);
 int main(void)
 {
-    /* USB HID setup */
+    const struct device *hid_dev;
+    int ret;
+
+    /* Retrieve the default HID device (instance 0) */
     hid_dev = device_get_binding("HID_0");
-    if (!hid_dev) {
-        printk("HID device not found\n");
-        return 0;
+    if (hid_dev == NULL) {
+        printk("ERROR: Cannot find HID device\n");
+        return;
     }
+
+    /* Register HID report descriptor and initialize HID device */
     usb_hid_register_device(hid_dev, hid_report_desc, sizeof(hid_report_desc), NULL);
-    if (usb_hid_init(hid_dev)) {
-        printk("USB HID init failed\n");
-        return 0;
-    }
-    if (usb_enable(NULL)) {
-        printk("USB enable failed\n");
-        return 0;
+    ret = usb_hid_init(hid_dev);
+    if (ret != 0) {
+        printk("ERROR: Failed to initialize USB HID (err %d)\n", ret);
+        return;
     }
 
-    if (!device_is_ready(strip)) {
-        LOG_ERR("LED strip device %s is not ready", strip->name);
-        return 0;
+    /* Enable the USB device */
+    ret = usb_enable(NULL);
+    if (ret != 0) {
+        printk("ERROR: Failed to enable USB (err %d)\n", ret);
+        return;
     }
 
-    if (kbd_init_check()) {
-        return 0;
+    printk("2x2 Keypad HID application ready.\n");
+    /* The input callback will now handle key events and send HID reports */
+    for (;;) {
+        k_sleep(K_FOREVER);
     }
+
+
 
     /* LED chase */
     size_t color = 0;
