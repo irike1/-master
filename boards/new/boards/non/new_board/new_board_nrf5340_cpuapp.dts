@@ -1,0 +1,19 @@
+/dts-v1/;
+#include <nordic/nrf5340_cpuapp_qkaa.dtsi>
+#include "new_board-pinctrl.dtsi"
+
+/ {
+	model = "new_board (CPUAPP)";
+	compatible = "non,new-board-cpuapp";
+
+	chosen {
+		zephyr,sram = &sram0_image;
+		zephyr,flash = &flash0;
+		zephyr,code-partition = &slot0_partition;
+		zephyr,sram-secure-partition = &sram0_s;
+		zephyr,sram-non-secure-partition = &sram0_ns;
+	};
+};
+
+#include "new_board-cpuapp_partitioning.dtsi"
+#include "new_board-shared_sram.dtsi"

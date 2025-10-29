@@ -1,0 +1,10 @@
+identifier: new_board/nrf5340/cpuapp/ns
+name: new_board
+vendor: non
+type: mcu
+arch: arm
+ram: 192
+flash: 192
+toolchain:
+  - zephyr
+supported: []

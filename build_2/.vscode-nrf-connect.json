@@ -1,0 +1,18 @@
+{
+  "toolchainPath": "c:\\ncs\\toolchains\\b8b84efebd",
+  "sdkPath": "c:\\ncs\\v3.1.0",
+  "board": "g915/nrf5340/cpuapp",
+  "boardDir": "c:\\my_boards\\boards\\nordic\\g915",
+  "boardDirs": [
+    "c:\\my_boards\\boards\\nordic\\g915"
+  ],
+  "optimizations": "none",
+  "cmakeArgs": [],
+  "confFiles": [],
+  "buildDirectory": "build_2",
+  "kconfigFragments": [],
+  "snippets": [],
+  "dtcOverlays": [],
+  "extraDtcOverlays": [],
+  "boardRoot": "c:\\my_boards"
+}

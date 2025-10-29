@@ -23,7 +23,7 @@ static uint8_t       pressed_key_usages[6] = { 0 };
 static size_t        pressed_count = 0;
 static const struct device *hid_dev = NULL;
 
-static const struct gpio_dt_spec led0  = GPIO_DT_SPEC_GET(DT_ALIAS(led0), gpios);
+// static const struct gpio_dt_spec led0  = GPIO_DT_SPEC_GET(DT_ALIAS(led0), gpios);
 
 #define STRIP_NODE DT_ALIAS(led_strip)
 #if DT_NODE_HAS_PROP(DT_ALIAS(led_strip), chain_length)
@@ -161,12 +161,12 @@ int main(void)
 
     /* LED chase */
     size_t color = 0;
-    int rc;
-    if (gpio_is_ready_dt(&led0)) {
-        gpio_pin_configure_dt(&led0, GPIO_OUTPUT_INACTIVE);
-    }
+    // int rc;
+    // if (gpio_is_ready_dt(&led0)) {
+    //     gpio_pin_configure_dt(&led0, GPIO_OUTPUT_INACTIVE);
+    // }
 
-       for (;;) {
-        k_sleep(K_FOREVER);
-    }
+    //    for (;;) {
+    //     k_sleep(K_FOREVER);
+    // }
 }

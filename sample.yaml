@@ -6,6 +6,7 @@ sample:
   boards:
     - nrf5340dk_nrf5340_cpuapp
     - g915_nrf5340_cpuapp
+    - new_board_nrf5340_cpuapp
   tags: 
     - usb hid input
     - LED

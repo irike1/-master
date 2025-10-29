@@ -1,0 +1,8 @@
+board:
+  name: new_board
+  vendor: non
+  socs:
+  - name: nrf5340
+    variants:
+    - name: ns
+      cpucluster: cpuapp
