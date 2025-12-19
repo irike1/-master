@@ -115,10 +115,6 @@ C:/All/code/nrf/master/build/master/zephyr/subsys/ipc/CMakeFiles/edit_cache.dir
 C:/All/code/nrf/master/build/master/zephyr/subsys/ipc/CMakeFiles/rebuild_cache.dir
 C:/All/code/nrf/master/build/master/zephyr/subsys/logging/CMakeFiles/edit_cache.dir
 C:/All/code/nrf/master/build/master/zephyr/subsys/logging/CMakeFiles/rebuild_cache.dir
-C:/All/code/nrf/master/build/master/zephyr/subsys/logging/backends/CMakeFiles/edit_cache.dir
-C:/All/code/nrf/master/build/master/zephyr/subsys/logging/backends/CMakeFiles/rebuild_cache.dir
-C:/All/code/nrf/master/build/master/zephyr/subsys/logging/frontends/CMakeFiles/edit_cache.dir
-C:/All/code/nrf/master/build/master/zephyr/subsys/logging/frontends/CMakeFiles/rebuild_cache.dir
 C:/All/code/nrf/master/build/master/zephyr/subsys/mem_mgmt/CMakeFiles/edit_cache.dir
 C:/All/code/nrf/master/build/master/zephyr/subsys/mem_mgmt/CMakeFiles/rebuild_cache.dir
 C:/All/code/nrf/master/build/master/zephyr/subsys/mgmt/CMakeFiles/edit_cache.dir
@@ -228,6 +224,7 @@ C:/All/code/nrf/master/build/master/modules/nrf/lib/bin/CMakeFiles/edit_cache.di
 C:/All/code/nrf/master/build/master/modules/nrf/lib/bin/CMakeFiles/rebuild_cache.dir
 C:/All/code/nrf/master/build/master/modules/nrf/lib/flash_patch/CMakeFiles/edit_cache.dir
 C:/All/code/nrf/master/build/master/modules/nrf/lib/flash_patch/CMakeFiles/rebuild_cache.dir
+C:/All/code/nrf/master/build/master/modules/nrf/lib/fatal_error/CMakeFiles/..__nrf__lib__fatal_error.dir
 C:/All/code/nrf/master/build/master/modules/nrf/lib/fatal_error/CMakeFiles/edit_cache.dir
 C:/All/code/nrf/master/build/master/modules/nrf/lib/fatal_error/CMakeFiles/rebuild_cache.dir
 C:/All/code/nrf/master/build/master/modules/nrf/lib/boot_banner/CMakeFiles/edit_cache.dir

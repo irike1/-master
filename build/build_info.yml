@@ -20,6 +20,6 @@ cmake:
   sysbuild: true
 version: 0.1.0
 west:
-  command: C:\ncs\toolchains\b620d30767\opt\bin\Scripts\west build --build-dir c:/All/code/nrf/master/build c:/All/code/nrf/master --pristine --board nrf5340dk/nrf5340/cpuapp
+  command: C:\ncs\toolchains\b620d30767\opt\bin\Scripts\west build --build-dir c:/All/code/nrf/master/build c:/All/code/nrf/master
   topdir: c:\ncs\v3.0.1
   version: 1.2.0

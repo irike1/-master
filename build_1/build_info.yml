@@ -1,5 +1,0 @@
-west:
-  command: C:\ncs\toolchains\b8b84efebd\opt\bin\Scripts\west build --build-dir c:/All/code/nrf/master/build_1
-    c:/All/code/nrf/master --pristine --board g915/nrf5340/cpuapp -- -DBOARD_ROOT=c:/my_boards
-  topdir: c:\ncs\v3.1.0
-  version: 1.4.0
