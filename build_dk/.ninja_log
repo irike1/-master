@@ -1,0 +1,11 @@
+# ninja log v5
+0	359	7881293026505881	_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-mkdir	16ed557a2cf4e23
+0	359	7881293026505881	C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-mkdir	16ed557a2cf4e23
+360	428	7881293027195906	_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-download	4410e55fdbd304
+360	428	7881293027195906	C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-download	4410e55fdbd304
+428	499	7881293027896251	_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-update	715a6ed5dfd88be9
+428	499	7881293027896251	C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-update	715a6ed5dfd88be9
+500	587	7881293028781470	_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-patch	d0f47b436b1e8e5b
+500	587	7881293028781470	C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-patch	d0f47b436b1e8e5b
+587	655	7881293029466606	_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-configure	2e8dea6d63415093
+587	655	7881293029466606	C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-configure	2e8dea6d63415093

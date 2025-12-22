@@ -1,0 +1,43 @@
+{
+	"sources" : 
+	[
+		{
+			"file" : "C:/All/code/-master/build/_sysbuild/sysbuild/images/CMakeFiles/-master"
+		},
+		{
+			"file" : "C:/All/code/-master/build/_sysbuild/sysbuild/images/CMakeFiles/-master.rule"
+		},
+		{
+			"file" : "C:/All/code/-master/build/_sysbuild/sysbuild/images/CMakeFiles/-master-complete.rule"
+		},
+		{
+			"file" : "C:/All/code/-master/build/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-build.rule"
+		},
+		{
+			"file" : "C:/All/code/-master/build/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-configure.rule"
+		},
+		{
+			"file" : "C:/All/code/-master/build/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-download.rule"
+		},
+		{
+			"file" : "C:/All/code/-master/build/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-install.rule"
+		},
+		{
+			"file" : "C:/All/code/-master/build/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-mkdir.rule"
+		},
+		{
+			"file" : "C:/All/code/-master/build/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-patch.rule"
+		},
+		{
+			"file" : "C:/All/code/-master/build/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-update.rule"
+		}
+	],
+	"target" : 
+	{
+		"labels" : 
+		[
+			"-master"
+		],
+		"name" : "-master"
+	}
+}

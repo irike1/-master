@@ -1,0 +1,7 @@
+default: -master
+build_dir: C:/All/code/-master/build
+domains:
+  - name: -master
+    build_dir: C:/All/code/-master/build/-master
+flash_order:
+  - -master

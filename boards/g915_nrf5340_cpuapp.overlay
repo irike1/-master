@@ -12,18 +12,18 @@
 
         /* ── Row GPIOs: P1.05 P0.23 P1.06 P0.19 P0.03 P0.02 P0.07 (inputs, pull‑up, active‑low) ── */
         row-gpios =
-            <&gpio1 04 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-            <&gpio1 05 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+            <&gpio1  4 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+            <&gpio1  5 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
             <&gpio0 23 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-            <&gpio0 07 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+            <&gpio0  7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
             <&gpio0 19 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
-            <&gpio0 07 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
+            <&gpio0  7 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>,
             <&gpio0 14 (GPIO_PULL_UP | GPIO_ACTIVE_LOW)>;
 
         /* ── Column GPIOs: P0.25 P0.22 P0.26 P0.24 P0.20 P1.08 P0.06 P1.00 P1.01 P0.05 P0.04 P1.11 P0.31 P0.30 P1.10 P0.29 P0.28 (outputs, active‑low) ── */
         col-gpios =
-            <&gpio1 06 GPIO_ACTIVE_LOW>,
-            <&gpio1 07 GPIO_ACTIVE_LOW>,
+            <&gpio1  6 GPIO_ACTIVE_LOW>,
+            <&gpio1  7 GPIO_ACTIVE_LOW>,
             <&gpio0 25 GPIO_ACTIVE_LOW>,
             <&gpio0 22 GPIO_ACTIVE_LOW>,
             <&gpio0 26 GPIO_ACTIVE_LOW>,
@@ -31,14 +31,14 @@
             <&gpio0 20 GPIO_ACTIVE_LOW>,
             <&gpio1  8 GPIO_ACTIVE_LOW>,
             <&gpio0 06 GPIO_ACTIVE_LOW>,
-            <&gpio1 00 GPIO_ACTIVE_LOW>,
+            <&gpio1  0 GPIO_ACTIVE_LOW>,
             <&gpio1  1 GPIO_ACTIVE_LOW>,
             <&gpio0  5 GPIO_ACTIVE_LOW>,
             <&gpio0  4 GPIO_ACTIVE_LOW>,
-            <&gpio1 11 GPIO_ACTIVE_LOW>,
+            <&gpio1 11 GPIO_ACTIVE_LOW>, 
             <&gpio0 31 GPIO_ACTIVE_LOW>,
             <&gpio0 30 GPIO_ACTIVE_LOW>,
-            <&gpio1 10 GPIO_ACTIVE_LOW>;
+            <&gpio1 10 GPIO_ACTIVE_LOW>; //on board
     
      keymap: keymap {
             compatible = "input-keymap";

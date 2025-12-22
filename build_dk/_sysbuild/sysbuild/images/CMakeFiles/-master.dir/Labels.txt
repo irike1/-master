@@ -1,0 +1,13 @@
+# Target labels
+ -master
+# Source files and their labels
+C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/CMakeFiles/-master
+C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/CMakeFiles/-master.rule
+C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/CMakeFiles/-master-complete.rule
+C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-build.rule
+C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-configure.rule
+C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-download.rule
+C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-install.rule
+C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-mkdir.rule
+C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-patch.rule
+C:/All/code/-master/build_dk/_sysbuild/sysbuild/images/-master-prefix/src/-master-stamp/-master-update.rule
