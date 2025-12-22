@@ -1,7 +1,0 @@
-default: master
-build_dir: C:/All/code/nrf/master/build
-domains:
-  - name: master
-    build_dir: C:/All/code/nrf/master/build/master
-flash_order:
-  - master

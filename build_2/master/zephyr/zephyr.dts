@@ -30,21 +30,11 @@
 
 	/* node '/aliases' defined in zephyr\dts\common\skeleton.dtsi:13 */
 	aliases {
-		led0 = &led0;               /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:91 */
-		led1 = &ext_led1;           /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:175 */
-		led2 = &led2;               /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:93 */
-		led3 = &led3;               /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:94 */
-		sw0 = &button0;             /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:95 */
-		sw1 = &button1;             /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:96 */
-		sw2 = &button2;             /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:97 */
-		sw3 = &button3;             /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:98 */
-		bootloader-led0 = &led0;    /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:99 */
-		mcuboot-button0 = &button0; /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:100 */
-		mcuboot-led0 = &led0;       /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:101 */
-		pwm-led0 = &pwm_led0;       /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:53 */
-		watchdog0 = &wdt0;          /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:54 */
-		kbd = &kbd_matrix;          /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:160 */
-		led-strip = &led_strip;     /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:216 */
+		pwm-led0 = &pwm_led0;   /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:42 */
+		watchdog0 = &wdt0;      /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:43 */
+		kbd = &kbd_matrix;      /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:160 */
+		led1 = &ext_led1;       /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:175 */
+		led-strip = &led_strip; /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:216 */
 	};
 
 	/* node '/soc' defined in zephyr\dts\arm\armv8-m.dtsi:6 */
@@ -121,8 +111,8 @@
 					compatible = "nordic,nrf53-lfxo";     /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:20 */
 					#clock-cells = < 0x0 >;               /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:21 */
 					clock-frequency = < 0x8000 >;         /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:22 */
-					load-capacitors = "internal";         /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:71 */
-					load-capacitance-picofarad = < 0x7 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:72 */
+					load-capacitors = "internal";         /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:60 */
+					load-capacitance-picofarad = < 0x7 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:61 */
 				};
 
 				/* node '/soc/peripheral@50000000/clock-controller@4000/hfxo' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:25 */
@@ -148,7 +138,7 @@
 					reg = < 0x4704 0x1 >;                  /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:42 */
 					status = "okay";                       /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:43 */
 					regulator-name = "VREGMAIN";           /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:44 */
-					regulator-initial-mode = < 0x1 >;      /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:59 */
+					regulator-initial-mode = < 0x1 >;      /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:48 */
 				};
 
 				/* node '/soc/peripheral@50000000/regulator@4000/regulator@4904' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:48 */
@@ -157,14 +147,14 @@
 					reg = < 0x4904 0x1 >;                  /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:50 */
 					status = "okay";                       /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:51 */
 					regulator-name = "VREGRADIO";          /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:52 */
-					regulator-initial-mode = < 0x1 >;      /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:63 */
+					regulator-initial-mode = < 0x1 >;      /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:52 */
 				};
 
 				/* node '/soc/peripheral@50000000/regulator@4000/regulator@4b00' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:56 */
 				vregh: regulator@4b00 {
 					compatible = "nordic,nrf53x-regulator-hv"; /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:57 */
 					reg = < 0x4b00 0x44 >;                     /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:58 */
-					status = "okay";                           /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:67 */
+					status = "okay";                           /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:56 */
 					regulator-name = "VREGH";                  /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:60 */
 				};
 			};
@@ -256,28 +246,28 @@
 				compatible = "nordic,nrf-uarte"; /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:143 */
 				reg = < 0x8000 0x1000 >;         /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:144 */
 				interrupts = < 0x8 0x1 >;        /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:145 */
-				status = "okay";                 /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:104 */
-				current-speed = < 0x1c200 >;     /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:105 */
-				pinctrl-0 = < &uart0_default >;  /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:106 */
-				pinctrl-1 = < &uart0_sleep >;    /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:107 */
+				status = "okay";                 /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:93 */
+				current-speed = < 0x1c200 >;     /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:94 */
+				pinctrl-0 = < &uart0_default >;  /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:95 */
+				pinctrl-1 = < &uart0_sleep >;    /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:96 */
 				pinctrl-names = "default",
-				                "sleep";         /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:108 */
+				                "sleep";         /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:97 */
 			};
 
 			/* node '/soc/peripheral@50000000/i2c@9000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:149 */
-			i2c1: arduino_i2c: i2c@9000 {
-				compatible = "nordic,nrf-twim"; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:96 */
+			i2c1: i2c@9000 {
+				compatible = "nordic,nrf-twim"; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:85 */
 				#address-cells = < 0x1 >;       /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:157 */
 				#size-cells = < 0x0 >;          /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:158 */
 				reg = < 0x9000 0x1000 >;        /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:159 */
 				interrupts = < 0x9 0x1 >;       /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:160 */
 				easydma-maxcnt-bits = < 0x10 >; /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:161 */
-				status = "okay";                /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:97 */
+				status = "okay";                /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:86 */
 				zephyr,pm-device-runtime-auto;  /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:163 */
-				pinctrl-0 = < &i2c1_default >;  /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:98 */
-				pinctrl-1 = < &i2c1_sleep >;    /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:99 */
+				pinctrl-0 = < &i2c1_default >;  /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:87 */
+				pinctrl-1 = < &i2c1_sleep >;    /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:88 */
 				pinctrl-names = "default",
-				                "sleep";        /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:100 */
+				                "sleep";        /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:89 */
 			};
 
 			/* node '/soc/peripheral@50000000/spi@9000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:166 */
@@ -293,35 +283,25 @@
 			};
 
 			/* node '/soc/peripheral@50000000/uart@9000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:183 */
-			uart1: arduino_serial: uart@9000 {
-				compatible = "nordic,nrf-uarte"; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:147 */
+			uart1: uart@9000 {
+				compatible = "nordic,nrf-uarte"; /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:184 */
 				reg = < 0x9000 0x1000 >;         /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:185 */
 				interrupts = < 0x9 0x1 >;        /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:186 */
 				status = "disabled";             /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:187 */
-				current-speed = < 0x1c200 >;     /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:148 */
-				pinctrl-0 = < &uart1_default >;  /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:149 */
-				pinctrl-1 = < &uart1_sleep >;    /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:150 */
-				pinctrl-names = "default",
-				                "sleep";         /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:151 */
 			};
 
 			/* node '/soc/peripheral@50000000/spi@a000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:190 */
-			spi4: arduino_spi: spi@a000 {
-				compatible = "nordic,nrf-spim";          /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:157 */
-				#address-cells = < 0x1 >;                /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:192 */
-				#size-cells = < 0x0 >;                   /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:193 */
-				reg = < 0xa000 0x1000 >;                 /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:194 */
-				interrupts = < 0xa 0x1 >;                /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:195 */
-				max-frequency = < 0x1e84800 >;           /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:196 */
-				easydma-maxcnt-bits = < 0x10 >;          /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:197 */
-				rx-delay-supported;                      /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:198 */
-				rx-delay = < 0x2 >;                      /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:199 */
-				status = "okay";                         /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:158 */
-				cs-gpios = < &arduino_header 0x10 0x1 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:159 */
-				pinctrl-0 = < &spi4_default >;           /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:160 */
-				pinctrl-1 = < &spi4_sleep >;             /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:161 */
-				pinctrl-names = "default",
-				                "sleep";                 /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:162 */
+			spi4: spi@a000 {
+				compatible = "nordic,nrf-spim"; /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:191 */
+				#address-cells = < 0x1 >;       /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:192 */
+				#size-cells = < 0x0 >;          /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:193 */
+				reg = < 0xa000 0x1000 >;        /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:194 */
+				interrupts = < 0xa 0x1 >;       /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:195 */
+				max-frequency = < 0x1e84800 >;  /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:196 */
+				easydma-maxcnt-bits = < 0x10 >; /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:197 */
+				rx-delay-supported;             /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:198 */
+				rx-delay = < 0x2 >;             /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:199 */
+				status = "disabled";            /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:200 */
 			};
 
 			/* node '/soc/peripheral@50000000/i2c@b000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:203 */
@@ -393,10 +373,9 @@
 				compatible = "nordic,nrf-saadc"; /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:286 */
 				reg = < 0xe000 0x1000 >;         /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:287 */
 				interrupts = < 0xe 0x1 >;        /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:288 */
-				status = "okay";                 /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:76 */
+				status = "okay";                 /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:65 */
 				#io-channel-cells = < 0x1 >;     /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:290 */
 				zephyr,pm-device-runtime-auto;   /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:291 */
-				phandle = < 0x17 >;              /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:34 */
 			};
 
 			/* node '/soc/peripheral@50000000/timer@f000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:294 */
@@ -419,7 +398,7 @@
 				max-bit-width = < 0x20 >;        /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:309 */
 				interrupts = < 0x10 0x1 >;       /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:310 */
 				prescaler = < 0x0 >;             /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:311 */
-				phandle = < 0x11 >;              /* in zephyr\dts\vendor\nordic\nrf_common.dtsi:41 */
+				phandle = < 0xc >;               /* in zephyr\dts\vendor\nordic\nrf_common.dtsi:41 */
 			};
 
 			/* node '/soc/peripheral@50000000/timer@11000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:314 */
@@ -539,13 +518,13 @@
 				compatible = "nordic,nrf-pwm"; /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:418 */
 				reg = < 0x21000 0x1000 >;      /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:419 */
 				interrupts = < 0x21 0x1 >;     /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:420 */
-				status = "okay";               /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:112 */
+				status = "okay";               /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:101 */
 				#pwm-cells = < 0x3 >;          /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:422 */
-				pinctrl-0 = < &pwm0_default >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:113 */
-				pinctrl-1 = < &pwm0_sleep >;   /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:114 */
+				pinctrl-0 = < &pwm0_default >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:102 */
+				pinctrl-1 = < &pwm0_sleep >;   /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:103 */
 				pinctrl-names = "default",
-				                "sleep";       /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:115 */
-				phandle = < 0x16 >;            /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:27 */
+				                "sleep";       /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:104 */
+				phandle = < 0xf >;             /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:27 */
 			};
 
 			/* node '/soc/peripheral@50000000/pwm@22000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:425 */
@@ -617,7 +596,7 @@
 				interrupts = < 0x2a 0x1 >;          /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:470 */
 				#mbox-cells = < 0x1 >;              /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:471 */
 				status = "okay";                    /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:472 */
-				phandle = < 0x13 >;                 /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_ipc.dtsi:10 */
+				phandle = < 0xe >;                  /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_ipc.dtsi:10 */
 			};
 
 			/* node '/soc/peripheral@50000000/qspi@2b000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:475 */
@@ -630,25 +609,25 @@
 				reg-names = "qspi",
 				            "qspi_mm";           /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:480 */
 				interrupts = < 0x2b 0x1 >;       /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:481 */
-				status = "okay";                 /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:119 */
-				pinctrl-0 = < &qspi_default >;   /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:120 */
-				pinctrl-1 = < &qspi_sleep >;     /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:121 */
+				status = "okay";                 /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:108 */
+				pinctrl-0 = < &qspi_default >;   /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:109 */
+				pinctrl-1 = < &qspi_sleep >;     /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:110 */
 				pinctrl-names = "default",
-				                "sleep";         /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:122 */
+				                "sleep";         /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:111 */
 
-				/* node '/soc/peripheral@50000000/qspi@2b000/mx25r6435f@0' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:124 */
+				/* node '/soc/peripheral@50000000/qspi@2b000/mx25r6435f@0' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:113 */
 				mx25r64: mx25r6435f@0 {
-					compatible = "nordic,qspi-nor";                                                                                                                                                                                 /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:125 */
-					reg = < 0x0 >;                                                                                                                                                                                                  /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:126 */
-					writeoc = "pp4io";                                                                                                                                                                                              /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:128 */
-					readoc = "read4io";                                                                                                                                                                                             /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:130 */
-					sck-frequency = < 0x7a1200 >;                                                                                                                                                                                   /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:131 */
-					jedec-id = [ C2 28 17 ];                                                                                                                                                                                        /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:132 */
-					sfdp-bfp = [ E5 20 F1 FF FF FF FF 03 44 EB 08 6B 08 3B 04 BB EE FF FF FF FF FF 00 FF FF FF 00 FF 0C 20 0F 52 10 D8 00 FF 23 72 F5 00 82 ED 04 CC 44 83 68 44 30 B0 30 B0 F7 C4 D5 5C 00 BE 29 FF F0 D0 FF FF ]; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:133 */
-					size = < 0x4000000 >;                                                                                                                                                                                           /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:139 */
-					has-dpd;                                                                                                                                                                                                        /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:140 */
-					t-enter-dpd = < 0x2710 >;                                                                                                                                                                                       /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:141 */
-					t-exit-dpd = < 0x88b8 >;                                                                                                                                                                                        /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:142 */
+					compatible = "nordic,qspi-nor";                                                                                                                                                                                 /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:114 */
+					reg = < 0x0 >;                                                                                                                                                                                                  /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:115 */
+					writeoc = "pp4io";                                                                                                                                                                                              /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:117 */
+					readoc = "read4io";                                                                                                                                                                                             /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:119 */
+					sck-frequency = < 0x7a1200 >;                                                                                                                                                                                   /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:120 */
+					jedec-id = [ C2 28 17 ];                                                                                                                                                                                        /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:121 */
+					sfdp-bfp = [ E5 20 F1 FF FF FF FF 03 44 EB 08 6B 08 3B 04 BB EE FF FF FF FF FF 00 FF FF FF 00 FF 0C 20 0F 52 10 D8 00 FF 23 72 F5 00 82 ED 04 CC 44 83 68 44 30 B0 30 B0 F7 C4 D5 5C 00 BE 29 FF F0 D0 FF FF ]; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:122 */
+					size = < 0x4000000 >;                                                                                                                                                                                           /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:128 */
+					has-dpd;                                                                                                                                                                                                        /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:129 */
+					t-enter-dpd = < 0x2710 >;                                                                                                                                                                                       /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:130 */
+					t-exit-dpd = < 0x88b8 >;                                                                                                                                                                                        /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:131 */
 				};
 			};
 
@@ -657,7 +636,7 @@
 				compatible = "nordic,nrf-nfct"; /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:486 */
 				reg = < 0x2d000 0x1000 >;       /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:487 */
 				interrupts = < 0x2d 0x1 >;      /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:488 */
-				status = "okay";                /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:80 */
+				status = "okay";                /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:69 */
 			};
 
 			/* node '/soc/peripheral@50000000/mutex@30000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:492 */
@@ -685,7 +664,7 @@
 
 			/* node '/soc/peripheral@50000000/usbd@36000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:512 */
 			usbd: zephyr_udc0: usbd@36000 {
-				compatible = "nordic,nrf-usbd"; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:170 */
+				compatible = "nordic,nrf-usbd"; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:140 */
 				reg = < 0x36000 0x1000 >;       /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:514 */
 				interrupts = < 0x36 0x1 >;      /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:515 */
 				num-bidir-endpoints = < 0x1 >;  /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:516 */
@@ -693,7 +672,7 @@
 				num-out-endpoints = < 0x7 >;    /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:518 */
 				num-isoin-endpoints = < 0x1 >;  /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:519 */
 				num-isoout-endpoints = < 0x1 >; /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:520 */
-				status = "okay";                /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:171 */
+				status = "okay";                /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:141 */
 			};
 
 			/* node '/soc/peripheral@50000000/regulator@37000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:524 */
@@ -823,10 +802,10 @@
 				gpio-controller;                /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:562 */
 				reg = < 0x842500 0x300 >;       /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:563 */
 				#gpio-cells = < 0x2 >;          /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:564 */
-				status = "okay";                /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:88 */
+				status = "okay";                /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:77 */
 				port = < 0x0 >;                 /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:566 */
 				gpiote-instance = < &gpiote >;  /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:567 */
-				phandle = < 0x14 >;             /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:12 */
+				phandle = < 0x11 >;             /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:36 */
 			};
 
 			/* node '/soc/peripheral@50000000/gpio@842800' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:570 */
@@ -836,16 +815,16 @@
 				reg = < 0x842800 0x300 >;       /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:573 */
 				#gpio-cells = < 0x2 >;          /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:574 */
 				ngpios = < 0x10 >;              /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:575 */
-				status = "okay";                /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:92 */
+				status = "okay";                /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:81 */
 				port = < 0x1 >;                 /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:577 */
 				gpiote-instance = < &gpiote >;  /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:578 */
-				phandle = < 0x15 >;             /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:169 */
+				phandle = < 0x10 >;             /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:36 */
 			};
 
 			/* node '/soc/peripheral@50000000/ieee802154' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:581 */
 			ieee802154: ieee802154 {
 				compatible = "nordic,nrf-ieee802154"; /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:582 */
-				status = "okay";                      /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:166 */
+				status = "okay";                      /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:136 */
 			};
 		};
 
@@ -862,9 +841,9 @@
 			compatible = "nordic,nrf-gpiote"; /* in zephyr\dts\arm\nordic\nrf5340_cpuapp.dtsi:86 */
 			reg = < 0x5000d000 0x1000 >;      /* in zephyr\dts\arm\nordic\nrf5340_cpuapp.dtsi:87 */
 			interrupts = < 0xd 0x5 >;         /* in zephyr\dts\arm\nordic\nrf5340_cpuapp.dtsi:88 */
-			status = "okay";                  /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:84 */
+			status = "okay";                  /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:73 */
 			instance = < 0x0 >;               /* in zephyr\dts\arm\nordic\nrf5340_cpuapp.dtsi:90 */
-			phandle = < 0x10 >;               /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:567 */
+			phandle = < 0xb >;                /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_peripherals.dtsi:567 */
 		};
 
 		/* node '/soc/gpiote@4002f000' defined in zephyr\dts\arm\nordic\nrf5340_cpuapp.dtsi:94 */
@@ -894,7 +873,7 @@
 
 		/* node '/pin-controller/i2c1_default' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:7 */
 		i2c1_default: i2c1_default {
-			phandle = < 0x4 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:98 */
+			phandle = < 0x4 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:87 */
 
 			/* node '/pin-controller/i2c1_default/group1' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:8 */
 			group1 {
@@ -905,7 +884,7 @@
 
 		/* node '/pin-controller/i2c1_sleep' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:14 */
 		i2c1_sleep: i2c1_sleep {
-			phandle = < 0x5 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:99 */
+			phandle = < 0x5 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:88 */
 
 			/* node '/pin-controller/i2c1_sleep/group1' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:15 */
 			group1 {
@@ -917,7 +896,7 @@
 
 		/* node '/pin-controller/uart0_default' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:22 */
 		uart0_default: uart0_default {
-			phandle = < 0x2 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:106 */
+			phandle = < 0x2 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:95 */
 
 			/* node '/pin-controller/uart0_default/group1' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:23 */
 			group1 {
@@ -935,7 +914,7 @@
 
 		/* node '/pin-controller/uart0_sleep' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:35 */
 		uart0_sleep: uart0_sleep {
-			phandle = < 0x3 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:107 */
+			phandle = < 0x3 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:96 */
 
 			/* node '/pin-controller/uart0_sleep/group1' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:36 */
 			group1 {
@@ -949,7 +928,7 @@
 
 		/* node '/pin-controller/pwm0_default' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:45 */
 		pwm0_default: pwm0_default {
-			phandle = < 0xb >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:113 */
+			phandle = < 0x6 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:102 */
 
 			/* node '/pin-controller/pwm0_default/group1' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:46 */
 			group1 {
@@ -959,7 +938,7 @@
 
 		/* node '/pin-controller/pwm0_sleep' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:51 */
 		pwm0_sleep: pwm0_sleep {
-			phandle = < 0xc >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:114 */
+			phandle = < 0x7 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:103 */
 
 			/* node '/pin-controller/pwm0_sleep/group1' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:52 */
 			group1 {
@@ -970,7 +949,7 @@
 
 		/* node '/pin-controller/qspi_default' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:58 */
 		qspi_default: qspi_default {
-			phandle = < 0xe >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:120 */
+			phandle = < 0x9 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:109 */
 
 			/* node '/pin-controller/qspi_default/group1' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:59 */
 			group1 {
@@ -986,7 +965,7 @@
 
 		/* node '/pin-controller/qspi_sleep' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:70 */
 		qspi_sleep: qspi_sleep {
-			phandle = < 0xf >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:121 */
+			phandle = < 0xa >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:110 */
 
 			/* node '/pin-controller/qspi_sleep/group1' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:71 */
 			group1 {
@@ -1008,7 +987,6 @@
 
 		/* node '/pin-controller/uart1_default' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:87 */
 		uart1_default: uart1_default {
-			phandle = < 0x6 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:149 */
 
 			/* node '/pin-controller/uart1_default/group1' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:88 */
 			group1 {
@@ -1026,7 +1004,6 @@
 
 		/* node '/pin-controller/uart1_sleep' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:100 */
 		uart1_sleep: uart1_sleep {
-			phandle = < 0x7 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:150 */
 
 			/* node '/pin-controller/uart1_sleep/group1' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:101 */
 			group1 {
@@ -1040,7 +1017,6 @@
 
 		/* node '/pin-controller/spi4_default' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:110 */
 		spi4_default: spi4_default {
-			phandle = < 0x9 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:160 */
 
 			/* node '/pin-controller/spi4_default/group1' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:111 */
 			group1 {
@@ -1052,7 +1028,6 @@
 
 		/* node '/pin-controller/spi4_sleep' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:118 */
 		spi4_sleep: spi4_sleep {
-			phandle = < 0xa >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:161 */
 
 			/* node '/pin-controller/spi4_sleep/group1' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common-pinctrl.dtsi:119 */
 			group1 {
@@ -1065,7 +1040,7 @@
 
 		/* node '/pin-controller/i2s0_default_alt' defined in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:180 */
 		i2s0_default_alt: i2s0_default_alt {
-			phandle = < 0xd >; /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:194 */
+			phandle = < 0x8 >; /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:194 */
 
 			/* node '/pin-controller/i2s0_default_alt/group1' defined in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:181 */
 			group1 {
@@ -1142,105 +1117,6 @@
 		};
 	};
 
-	/* node '/leds' defined in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:8 */
-	leds {
-		compatible = "gpio-leds"; /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:166 */
-
-		/* node '/leds/led_0' defined in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:11 */
-		led0: led_0 {
-			gpios = < &gpio0 0x1c 0x1 >; /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:12 */
-			label = "Green LED 0";       /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:13 */
-		};
-
-		/* node '/leds/led_1' defined in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:16 */
-		led1: led_1 {
-			gpios = < &gpio0 0x1d 0x1 >; /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:17 */
-			label = "Green LED 1";       /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:18 */
-		};
-
-		/* node '/leds/led_2' defined in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:21 */
-		led2: led_2 {
-			gpios = < &gpio0 0x1e 0x1 >; /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:22 */
-			label = "Green LED 2";       /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:23 */
-		};
-
-		/* node '/leds/led_3' defined in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:26 */
-		led3: led_3 {
-			gpios = < &gpio0 0x1f 0x1 >; /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:27 */
-			label = "Green LED 3";       /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:28 */
-		};
-
-		/* node '/leds/led1' defined in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:168 */
-		ext_led1: led1 {
-			gpios = < &gpio1 0xd 0x0 >; /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:169 */
-			label = "Ext LED1";         /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:170 */
-		};
-	};
-
-	/* node '/buttons' defined in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:32 */
-	buttons {
-		compatible = "gpio-keys"; /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:33 */
-
-		/* node '/buttons/button_0' defined in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:35 */
-		button0: button_0 {
-			gpios = < &gpio0 0x17 0x11 >; /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:36 */
-			label = "Push button 1";      /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:37 */
-			zephyr,code = < 0xb >;        /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:38 */
-		};
-
-		/* node '/buttons/button_1' defined in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:41 */
-		button1: button_1 {
-			gpios = < &gpio0 0x18 0x11 >; /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:42 */
-			label = "Push button 2";      /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:43 */
-			zephyr,code = < 0x2 >;        /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:44 */
-		};
-
-		/* node '/buttons/button_2' defined in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:47 */
-		button2: button_2 {
-			gpios = < &gpio0 0x8 0x11 >; /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:48 */
-			label = "Push button 3";     /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:49 */
-			zephyr,code = < 0x3 >;       /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:50 */
-		};
-
-		/* node '/buttons/button_3' defined in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:53 */
-		button3: button_3 {
-			gpios = < &gpio0 0x9 0x11 >; /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:54 */
-			label = "Push button 4";     /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:55 */
-			zephyr,code = < 0x4 >;       /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:56 */
-		};
-	};
-
-	/* node '/connector' defined in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:60 */
-	arduino_header: connector {
-		compatible = "arduino-header-r3";          /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:61 */
-		#gpio-cells = < 0x2 >;                     /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:62 */
-		gpio-map-mask = < 0xffffffff 0xffffffc0 >; /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:63 */
-		gpio-map-pass-thru = < 0x0 0x3f >;         /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:64 */
-		gpio-map = < 0x0 0x0 &gpio0 0x4 0x0 >,
-		           < 0x1 0x0 &gpio0 0x5 0x0 >,
-		           < 0x2 0x0 &gpio0 0x6 0x0 >,
-		           < 0x3 0x0 &gpio0 0x7 0x0 >,
-		           < 0x4 0x0 &gpio0 0x19 0x0 >,
-		           < 0x5 0x0 &gpio0 0x1a 0x0 >,
-		           < 0x6 0x0 &gpio1 0x0 0x0 >,
-		           < 0x7 0x0 &gpio1 0x1 0x0 >,
-		           < 0x8 0x0 &gpio1 0x4 0x0 >,
-		           < 0x9 0x0 &gpio1 0x5 0x0 >,
-		           < 0xa 0x0 &gpio1 0x6 0x0 >,
-		           < 0xb 0x0 &gpio1 0x7 0x0 >,
-		           < 0xc 0x0 &gpio1 0x8 0x0 >,
-		           < 0xd 0x0 &gpio1 0x9 0x0 >,
-		           < 0xe 0x0 &gpio1 0xa 0x0 >,
-		           < 0xf 0x0 &gpio1 0xb 0x0 >,
-		           < 0x10 0x0 &gpio1 0xc 0x0 >,
-		           < 0x11 0x0 &gpio1 0xd 0x0 >,
-		           < 0x12 0x0 &gpio1 0xe 0x0 >,
-		           < 0x13 0x0 &gpio1 0xf 0x0 >,
-		           < 0x14 0x0 &gpio1 0x2 0x0 >,
-		           < 0x15 0x0 &gpio1 0x3 0x0 >;    /* in ..\..\my_boards\boards\nordic\g915\g915_common.dtsi:65 */
-		phandle = < 0x8 >;                         /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:159 */
-	};
-
 	/* node '/pwmleds' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:23 */
 	pwmleds {
 		compatible = "pwm-leds"; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:24 */
@@ -1251,29 +1127,17 @@
 		};
 	};
 
-	/* node '/analog-connector' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:31 */
-	arduino_adc: analog-connector {
-		compatible = "arduino,uno-adc";    /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:32 */
-		#io-channel-cells = < 0x1 >;       /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:33 */
-		io-channel-map = < 0x0 &adc 0x0 >,
-		                 < 0x1 &adc 0x1 >,
-		                 < 0x2 &adc 0x2 >,
-		                 < 0x3 &adc 0x3 >,
-		                 < 0x4 &adc 0x4 >,
-		                 < 0x5 &adc 0x5 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:34 */
-	};
-
-	/* node '/nrf-gpio-forwarder' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:42 */
+	/* node '/nrf-gpio-forwarder' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:31 */
 	gpio_fwd: nrf-gpio-forwarder {
-		compatible = "nordic,nrf-gpio-forwarder"; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:43 */
-		status = "okay";                          /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:44 */
+		compatible = "nordic,nrf-gpio-forwarder"; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:32 */
+		status = "okay";                          /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:33 */
 
-		/* node '/nrf-gpio-forwarder/uart' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:46 */
+		/* node '/nrf-gpio-forwarder/uart' defined in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:35 */
 		uart {
 			gpios = < &gpio1 0x1 0x0 >,
 			        < &gpio1 0x0 0x0 >,
 			        < &gpio0 0xb 0x0 >,
-			        < &gpio0 0xa 0x0 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:47 */
+			        < &gpio0 0xa 0x0 >; /* in ..\..\my_boards\boards\nordic\g915\nrf5340_cpuapp_common.dtsi:36 */
 		};
 	};
 
@@ -1306,7 +1170,7 @@
 		/* node '/reserved-memory/memory@20070000' defined in zephyr\dts\vendor\nordic\nrf5340_shared_sram_partition.dtsi:30 */
 		sram0_shared: memory@20070000 {
 			reg = < 0x20070000 0x10000 >; /* in zephyr\dts\vendor\nordic\nrf5340_shared_sram_partition.dtsi:32 */
-			phandle = < 0x12 >;           /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_ipc.dtsi:9 */
+			phandle = < 0xd >;            /* in zephyr\dts\arm\nordic\nrf5340_cpuapp_ipc.dtsi:9 */
 		};
 	};
 
@@ -1344,6 +1208,17 @@
 			row-size = < 0x6 >;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:45 */
 			col-size = < 0x11 >;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:46 */
 			keymap = < 0x100b7 0x200b8 0x300b9 0x400ba 0xa00a5 0xb00a4 0xc00a3 0xd0071 0x1000001 0x101003b 0x102003c 0x103003d 0x104003e 0x106003f 0x1070040 0x1080041 0x1090042 0x10a0043 0x10b0044 0x10c0057 0x10d0058 0x10e00d2 0x10f0046 0x1100077 0x2000029 0x2010002 0x2020003 0x2030004 0x2040005 0x2050006 0x2060007 0x2070008 0x2080009 0x209000a 0x20a000b 0x20b000c 0x20c000d 0x20d000e 0x20e006e 0x20f0066 0x2100068 0x300000f 0x3010010 0x3020011 0x3030012 0x3040013 0x3050014 0x3060015 0x3070016 0x3080017 0x3090018 0x30a0019 0x30b001a 0x30c001b 0x30d002b 0x30e006f 0x30f006b 0x310006d >; /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:50 */
+		};
+	};
+
+	/* node '/leds' defined in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:165 */
+	leds {
+		compatible = "gpio-leds"; /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:166 */
+
+		/* node '/leds/led1' defined in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:168 */
+		ext_led1: led1 {
+			gpios = < &gpio1 0xd 0x0 >; /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:169 */
+			label = "Ext LED1";         /* in ..\..\All\code\nrf\master\boards\g915_nrf5340_cpuapp.overlay:170 */
 		};
 	};
 };

@@ -1,18 +1,8 @@
-/*
- * Local WS2812 I2S LED-strip driver – forked from Zephyr 4.1 “drivers/led_strip/ws2812_i2s.c”.
- * Modifications:
- *   • Uses project-local "led_strip.h" and "led.h".
- *   • Does not depend on CONFIG_LED_STRIP.* symbols.
- *   • Aligns with Zephyr 4.1 upstream changes (DT_INST_BUS, new ser(), etc.).
- * SPDX-License-Identifier: Apache-2.0
- */
-
 #define DT_DRV_COMPAT worldsemi_ws2812_i2s
 
 #include <string.h>
 #include "led_strip.h"
 
-/* Logging --------------------------------------------------------------- */
 #ifndef CONFIG_LED_STRIP_LOG_LEVEL
 #define CONFIG_LED_STRIP_LOG_LEVEL LOG_LEVEL_DBG
 #endif
@@ -20,7 +10,6 @@
 #include <zephyr/logging/log.h>
 LOG_MODULE_REGISTER(ws2812_i2s);
 
-/* Zephyr deps ----------------------------------------------------------- */
 #include <zephyr/device.h>
 #include <zephyr/drivers/i2s.h>
 #include "led.h"

@@ -14,7 +14,6 @@
 #include <string.h>
 #define LOG_LEVEL 4
 #include <zephyr/logging/log.h>
-
 LOG_MODULE_REGISTER(main);
 
 
@@ -26,13 +25,9 @@ LOG_MODULE_REGISTER(main);
 #error Unable to determine length of LED strip
 #endif
 static const struct device *const strip = DEVICE_DT_GET(STRIP_NODE);
-
 #define DELAY_TIME K_MSEC(CONFIG_SAMPLE_LED_UPDATE_DELAY)
-
 #define RGB(_r, _g, _b, _w, _a) { .r = (_r), .g = (_g), .b = (_b), .w = (_w), .a = (_a) }
-
 #define KBD_NODE DT_ALIAS(kbd)
-
 static const struct led_rgb colors[] = {
     RGB(0x0f, 0x00, 0x00, 0x00, 0x00),
     RGB(0x00, 0x0f, 0x00, 0x00, 0x00),
@@ -40,17 +35,14 @@ static const struct led_rgb colors[] = {
     RGB(0x00, 0x00, 0x00, 0x0f, 0x00),
     RGB(0x00, 0x00, 0x00, 0x00, 0x0f),
 };
-
 static struct led_rgb pixels[STRIP_NUM_PIXELS];
 
 
 
 /* HID keyboard report descriptor (standard boot keyboard with 6KRO) */
 static const uint8_t hid_report_desc[] = HID_KEYBOARD_REPORT_DESC();
-
 /* Buffer for current keys pressed (up to 6 keys) */
 static uint8_t key_report[8] = { 0 };  /* [0]=mods, [1]=reserved, [2..7]=keys */
-
 /* Track pressed keys count and list for building reports */
 static uint8_t pressed_key_usages[6] = { 0 };
 static size_t pressed_count = 0;
@@ -62,11 +54,6 @@ static void handle_key_event(struct input_event *evt, void *user_data)
     }
     uint16_t code = evt->code;
     int32_t value = evt->value;  /* 1 for press, 0 for release */
-
-    /* Only handle our keypad keys (INPUT_KEY_1 through INPUT_KEY_4) */
-    // if (code < INPUT_KEY_1 || code > INPUT_KEY_4) {
-    //     return;
-    // }
 
     /* Convert to HID usage code and modifier (if any) */
     int16_t hid_usage = input_to_hid_code(code);
@@ -138,7 +125,7 @@ int main(void)
         return;
     }
 
-    printk("2x2 Keypad HID application ready.\n");
+    printk("Keypad HID application ready.\n");
     /* The input callback will now handle key events and send HID reports */
     for (;;) {
         k_sleep(K_FOREVER);
